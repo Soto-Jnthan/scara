@@ -3,7 +3,7 @@
     SCARA Robot Controller
   </h1>
   <p>
-    <b><i>An application for controlling a SCARA robotic arm using a joystick, accelerometer, or autonomous mode</i></b>
+    <b><i>An application for controlling a SCARA robotic arm autonomously or by using a joystick or accelerometer </i></b>
   </p>
   <p>
     Developed using&nbsp;&nbsp;
@@ -28,9 +28,9 @@
 
 ## Overview
 
-This project implements firmware for a SCARA robotic arm controlled via an [ADuC834](https://www.analog.com/media/en/technical-documentation/data-sheets/ADUC834.pdf), an 8051-compatible microcontroller . It supports interactive joystick control, motion tracking via an accelerometer and autonomous movement. The system is designed for educational embedded robotics applications, originally conceived as a project in Warsaw University of Technology's course for microcontrollers.
+This project implements firmware for a SCARA Robot controlled via an [ADuC834](https://www.analog.com/media/en/technical-documentation/data-sheets/ADUC834.pdf), an 8051-compatible microcontroller . It supports interactive joystick control, motion tracking via an accelerometer and autonomous movement. The system is designed for educational embedded robotics applications, originally conceived as a project in Warsaw University of Technology's course for microcontrollers.
 
-An illustration of the SCARA robotic arm configuration is presented [here](https://www.desmos.com/calculator/3ebmf7hpk8) as an interactive Desmos graph.
+An illustration of the SCARA Robot configuration is presented [here](https://www.desmos.com/calculator/3ebmf7hpk8) as an interactive Desmos graph.
 
 ---
 
@@ -75,7 +75,7 @@ Additionally, this repository is compatible with the [EIDE](https://marketplace.
 
 ## Usage
 
-Flash `build/release.hex` onto your 8051 microcontroller using your preferred flashing tool. Connect the required peripherals (joystick, LCD, accelerometer, servo drivers and buttons as specified by `inc/lab_board.h`), then power on the system.
+Flash `build/release.hex` onto your ADuC834 microcontroller using your preferred flashing tool. Connect the required peripherals (joystick, LCD, accelerometer, servo drivers and buttons as specified by `inc/lab_board.h`), then power on the system.
 
 States:
 - **IDLE**: Waits for user input via buttons.
