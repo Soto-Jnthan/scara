@@ -79,16 +79,23 @@ static void state_idle(void)
         lcd_puts("BUT.B:XLDA");
         lcd_cmd(LCD_ROWFOUR);
         lcd_puts("BUT.C:Auto");
+        return;
     }
 
-    if (BTNA_CHK)
+    if (BTNA_CHK) {
         state_jstk();
+        return;
+    }
 
-    if (xlda_on && BTNB_CHK)
+    if (xlda_on && BTNB_CHK) {
         state_xlda();
-
-    if (BTNC_CHK)
+        return;
+    }
+        
+    if (BTNC_CHK) {
         state_auto();
+        return;
+    }  
 }
 
 /**
@@ -105,6 +112,13 @@ static void state_jstk(void)
         lcd_puts("JSTK Mode");
         lcd_cmd(LCD_ROWFOUR);
         lcd_puts("BUT.C:Exit");
+        return;
+    }
+
+    if (BTNC_CHK) {
+        DBNC_BTN(BTNC_CHK);
+        state_idle();
+        return;
     }
 
     dx = NORM_INPUT(jstk_read(X_AXIS), JSTK_X_MIN, JSTK_X_MAX);
@@ -129,11 +143,6 @@ static void state_jstk(void)
         current_pos.x -= dx;
         current_pos.y -= dy;
     }
-
-    if (BTNC_CHK) {
-        DBNC_BTN(BTNC_CHK);
-        state_idle();
-    }
 }
 
 /**
@@ -150,6 +159,13 @@ static void state_xlda(void)
         lcd_puts("XLDA Mode");
         lcd_cmd(LCD_ROWFOUR);
         lcd_puts("BUT.C:Exit");
+        return;
+    }
+
+    if (BTNC_CHK) {
+        DBNC_BTN(BTNC_CHK);
+        state_idle();
+        return;
     }
 
     dx = NORM_INPUT(xlda_read(X_ACC), XLDA_X_MIN, XLDA_X_MAX);
@@ -170,11 +186,6 @@ static void state_xlda(void)
         current_pos.x -= dx;
         current_pos.y -= dy;
     }
-
-    if (BTNC_CHK) {
-        DBNC_BTN(BTNC_CHK);
-        state_idle();
-    }
 }
 
 /**
@@ -192,6 +203,7 @@ static void state_auto(void)
         lcd_cmd(LCD_ROWFOUR);
         lcd_puts("In Progress");
         lcd_cmd(LCD_DCBON);
+        return;
     }
 
     for (p_cnt = 0; p_cnt != ARR_SIZE(figure); p_cnt++) {
@@ -204,8 +216,8 @@ static void state_auto(void)
         delay_ms(AUTO_MODE_DELAY_MS);
     }
 
-    sv_move(&current_pos);
     lcd_cmd(LCD_DONCBOFF);
+    sv_move(&current_pos);
     state_idle();
 }
 
