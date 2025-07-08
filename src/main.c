@@ -101,6 +101,7 @@ static void state_idle(void)
 static void state_jstk(void)
 {
     float dx, dy;
+    uint8_t readout[ADC_REGS];
     if (current_state != state_jstk) {
         current_state = state_jstk;
         lcd_setcolor(LCD_CYAN);
@@ -115,13 +116,18 @@ static void state_jstk(void)
         return;
     }
 
-    dx = NORM_INPUT(jstk_read(X_AXIS), JSTK_X_MIN, JSTK_X_MAX);
+    if (jstk_read(readout) != ADC_OK) {
+        lcd_puts("ADC_ERR", LCD_ROWTWO);
+        return;
+    }
+
+    dx = NORM_INPUT(readout[X_AXIS], JSTK_X_MIN, JSTK_X_MAX);
     if (fabsf(dx) < JSTK_THRSH * MAX_DELTA_POS)
         dx = 0;
     else
         current_pos.x += dx;
 
-    dy = NORM_INPUT(jstk_read(Y_AXIS), JSTK_Y_MIN, JSTK_Y_MAX);
+    dy = NORM_INPUT(readout[Y_AXIS], JSTK_Y_MIN, JSTK_Y_MAX);
     if (fabsf(dy) < JSTK_THRSH * MAX_DELTA_POS)
         dy = 0;
     else
