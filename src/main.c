@@ -42,6 +42,7 @@ static const struct point figure[] = AUTO_MODE_POINTS;
  */
 void main(void)
 {
+    PLLCON = PLLCON_INIT_VAL; // Configure core clock
     current_state = state_init;
     while (1)
         current_state();
@@ -53,12 +54,10 @@ void main(void)
  */
 static void state_init(void)
 {
-    PLLCON = PLLCON_INIT_VAL; // Configure core clock
     lcd_init();
     sv_init();
     jstk_init();
     xlda_on = xlda_init() == I2C_ACK;
-    sv_move(&current_pos); // Move arm to initial position
     state_idle();
 }
 
@@ -70,6 +69,7 @@ static void state_idle(void)
 {
     if (current_state != state_idle) {
         current_state = state_idle;
+        sv_move(&current_pos); // Init/revert current_pos
         lcd_setcolor(LCD_GREEN);
         lcd_cmd(LCD_CLEAR);
         lcd_puts("IDLE Mode");
@@ -216,7 +216,6 @@ static void state_auto(void)
     }
 
     lcd_cmd(LCD_DONCBOFF);
-    sv_move(&current_pos);
     state_idle();
 }
 
