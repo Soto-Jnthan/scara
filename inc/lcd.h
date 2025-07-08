@@ -18,6 +18,7 @@
 /* Public typedefs/enums -----------------------------------------------------*/
 enum lcd_command {
 //                                      D7  D6  D5  D4  D3   D2  D1   D0
+    LCD_NOP     = 0x00,   //             0   0   0   0   0    0   0    0
     LCD_CLEAR   = 0x01,   //             0   0   0   0   0    0   0    1
     LCD_RETHOME = 0x02,   //             0   0   0   0   0    0   1    *
 // Entry Set                             0   0   0   0   0    1  I/D   S
@@ -78,7 +79,7 @@ enum lcd_color {
 void lcd_init(void);
 void lcd_cmd(uint8_t cmd);
 void lcd_putchar(char c);
-void lcd_puts(const char *str);
+void lcd_puts(const char *str, uint8_t cmd);
 
 /* Public inline functions' definitions --------------------------------------*/
 
