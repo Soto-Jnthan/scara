@@ -18,7 +18,7 @@
 /* Public defines ------------------------------------------------------------*/
 
 /* main config definitions: */
-#define PLLCON_INIT_VAL    0x00 // Assigned to PLLCON at application entry
+#define PLLCON_INIT_VAL    0x00 // Must be assigned to PLLCON at application entry
 #define BTNA_CHK           BTN1_CHK
 #define BTNB_CHK           BTN2_CHK
 #define BTNC_CHK           BTN4_CHK

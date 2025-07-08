@@ -52,7 +52,6 @@ void lcd_init(void)
     LCD_CLR_E();
     delay_ms(LCD_REWRITE_DELAY_MS);
 
-    /* 4-bit interface */
     lcd_4b_wrt(LCD_4BIT1LX8);
     delay_ms(LCD_REWRITE_DELAY_MS);
     

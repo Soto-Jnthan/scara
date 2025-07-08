@@ -133,7 +133,6 @@ static void state_jstk(void)
     else
         current_pos.y += dy;
 
-    /* Press button to toggle tip */ 
     if (JSTK_RIGHT_BTN_CHK) {
         DBNC_BTN(JSTK_RIGHT_BTN_CHK);
         current_pos.z = !current_pos.z;
