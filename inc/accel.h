@@ -13,7 +13,6 @@
 #define ACCEL_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "utils.h"
 #include "lsm6ds33.h"
 #include "i2c.h"
 
