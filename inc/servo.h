@@ -13,7 +13,6 @@
 #define SERVO_H
 
 /* Includes ------------------------------------------------------------------*/
-#include <ADuC834.h>
 #include <math.h>
 #include "utils.h"
 
