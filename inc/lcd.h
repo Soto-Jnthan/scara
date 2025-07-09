@@ -18,7 +18,6 @@
 /* Public typedefs/enums -----------------------------------------------------*/
 enum lcd_command {
 //                                      D7  D6  D5  D4  D3   D2  D1   D0
-    LCD_NOP     = 0x00,   //             0   0   0   0   0    0   0    0
     LCD_CLEAR   = 0x01,   //             0   0   0   0   0    0   0    1
     LCD_RETHOME = 0x02,   //             0   0   0   0   0    0   1    *
 // Entry Set                             0   0   0   0   0    1  I/D   S
@@ -79,7 +78,7 @@ enum lcd_color {
 void lcd_init(void);
 void lcd_cmd(uint8_t cmd);
 void lcd_putchar(char c);
-void lcd_puts(const char *str, uint8_t cmd);
+void lcd_puts(const char *str);
 
 /* Public inline functions' definitions --------------------------------------*/
 
@@ -92,6 +91,18 @@ inline void lcd_setcolor(enum lcd_color c)
 {
     PORT_LCD_LED &= ~c;
     PORT_LCD_LED |= c ^ LCD_WHITE;
+}
+
+/**
+ * @brief  Send a command and a null-terminated string to the LCD
+ * @param  str Pointer to null-terminated array of characters
+ * @param  cmd Command to be executed before sending the array
+ * @retval None
+ */
+inline void lcd_puts_at(const char *str, uint8_t cmd)
+{
+    lcd_cmd(cmd);
+    lcd_puts(str);
 }
 
 #endif // LCD_H

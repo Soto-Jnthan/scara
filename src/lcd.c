@@ -82,12 +82,10 @@ static void lcd_4b_wrt(uint8_t byte)
  */
 void lcd_cmd(uint8_t cmd)
 {
-    if (cmd != LCD_NOP) {
-        LCD_CLR_RS();
-        lcd_4b_wrt(cmd);
-        lcd_4b_wrt(SWAP_NIBS(cmd));
-        delay_ms(LCD_MAX_BUSY_DELAY_MS);
-    }
+    LCD_CLR_RS();
+    lcd_4b_wrt(cmd);
+    lcd_4b_wrt(SWAP_NIBS(cmd));
+    delay_ms(LCD_MAX_BUSY_DELAY_MS);
 }
 
 /**
@@ -106,12 +104,10 @@ void lcd_putchar(char c)
 /**
  * @brief  Send a null-terminated string to the LCD
  * @param  str Pointer to null-terminated array of characters
- * @param  cmd Command to be executed before sending array (LCD_NOP ignored)
  * @retval None
  */
-void lcd_puts(const char *str, uint8_t cmd)
+void lcd_puts(const char *str)
 {
-    lcd_cmd(cmd);
     while (*str != '\0')
         lcd_putchar(*str++);
 }
