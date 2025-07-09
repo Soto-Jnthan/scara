@@ -24,20 +24,18 @@ void jstk_init(void)
 }
 
 /**
- * @brief Read the value of one of the two axes of the joystick
+ * @brief Read the values of the two axes of the joystick
  * @note ADC0 and ADC1 assumed to be connected to x-axis and y-axis respectively
- * @param in Axis to be read via JSTK_Input enum
- * @retval Readout from the joystick
+ * @param pdata Pointer to data buffer (size of at least ADC_REGS bytes)
+ * @retval ADC_OK if both ADC readings were successfuly, ADC_ERR otherwise
  */
-uint8_t jstk_read(jstk_input_t in)
+adc_status_t jstk_read(uint8_t pdata[static ADC_REGS])
 {
-    if (in == X_AXIS) {
-        RDY0 = 0;
-        while (!RDY0);
-        return ADC0H;
-    } else {
-        RDY1 = 0;
-        while (!RDY1);
-        return ADC1H;
-    }
+    RDY0 = 0;
+    RDY1 = 0;
+    while (!RDY0);
+    pdata[X_AXIS] = ADC0H;
+    while (!RDY1);
+    pdata[Y_AXIS] = ADC1H;
+    return ERR0 | ERR1;
 }
