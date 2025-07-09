@@ -71,10 +71,10 @@ static void state_idle(void)
         current_state = state_idle;
         sv_move(&current_pos); // Init/revert current_pos
         lcd_setcolor(LCD_GREEN);
-        lcd_puts("IDLE Mode", LCD_CLEAR);
-        lcd_puts("BUT.A:JSTK", LCD_ROWTWO);
-        lcd_puts("BUT.B:XLDA", LCD_ROWTHREE);
-        lcd_puts("BUT.C:Auto", LCD_ROWFOUR);
+        lcd_puts_at("IDLE Mode", LCD_CLEAR);
+        lcd_puts_at("BUT.A:JSTK", LCD_ROWTWO);
+        lcd_puts_at("BUT.B:XLDA", LCD_ROWTHREE);
+        lcd_puts_at("BUT.C:Auto", LCD_ROWFOUR);
         return;
     }
 
@@ -105,8 +105,8 @@ static void state_jstk(void)
     if (current_state != state_jstk) {
         current_state = state_jstk;
         lcd_setcolor(LCD_CYAN);
-        lcd_puts("JSTK Mode", LCD_CLEAR);
-        lcd_puts("BUT.C:Exit", LCD_ROWFOUR);
+        lcd_puts_at("JSTK Mode", LCD_CLEAR);
+        lcd_puts_at("BUT.C:Exit", LCD_ROWFOUR);
         return;
     }
 
@@ -117,7 +117,7 @@ static void state_jstk(void)
     }
 
     if (jstk_read(readout) != ADC_OK) {
-        lcd_puts("ADC_ERR", LCD_ROWTWO);
+        lcd_puts_at("ADC_ERR", LCD_ROWTWO);
         return;
     }
 
@@ -155,8 +155,8 @@ static void state_xlda(void)
     if (current_state != state_xlda) {
         current_state = state_xlda;
         lcd_setcolor(LCD_CYAN);
-        lcd_puts("XLDA Mode", LCD_CLEAR);
-        lcd_puts("BUT.C:Exit", LCD_ROWFOUR);
+        lcd_puts_at("XLDA Mode", LCD_CLEAR);
+        lcd_puts_at("BUT.C:Exit", LCD_ROWFOUR);
         return;
     }
 
@@ -167,7 +167,7 @@ static void state_xlda(void)
     }
 
     if (!xlda_on || xlda_read(readout) != I2C_ACK) {
-        lcd_puts("I2C_ERR", LCD_ROWTWO);
+        lcd_puts_at("I2C_ERR", LCD_ROWTWO);
         return;
     }
 
@@ -201,15 +201,15 @@ static void state_auto(void)
     if (current_state != state_auto) {
         current_state = state_auto;
         lcd_setcolor(LCD_MAGENTA);
-        lcd_puts("Auto Mode", LCD_CLEAR);
-        lcd_puts("In Progress", LCD_ROWFOUR);
+        lcd_puts_at("Auto Mode", LCD_CLEAR);
+        lcd_puts_at("In Progress", LCD_ROWFOUR);
         lcd_cmd(LCD_DCBON);
         return;
     }
 
     for (p_cnt = 0; p_cnt != ARR_SIZE(figure); p_cnt++) {
         if(!sv_move(&figure[p_cnt])) {
-            lcd_puts("Bad Coord.", LCD_ROWTWO);
+            lcd_puts_at("Bad Coord.", LCD_ROWTWO);
             delay_ms(ERR_DELAY_MS);
             break;
         }
