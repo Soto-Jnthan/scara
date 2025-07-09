@@ -32,7 +32,7 @@ static void state_auto(void);
 
 /* Private variables ----------------------------------------------------------*/
 static bool xlda_on;
-static void (*current_state)(void);
+static void (*current_state)(void) = state_init;
 static struct point current_pos = INITIAL_POSITION;
 static const struct point figure[] = AUTO_MODE_POINTS;
 
@@ -43,7 +43,6 @@ static const struct point figure[] = AUTO_MODE_POINTS;
 void main(void)
 {
     PLLCON = PLLCON_INIT_VAL; // Configure core clock
-    current_state = state_init;
     while (1)
         current_state();
 }
