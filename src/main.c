@@ -17,7 +17,7 @@
 #include "servo.h"
 
 /* Private macros -------------------------------------------------------------*/
-#define DBNC_BTN(BTN) do {delay_ms(DBNC_DELAY_MS); while (BTN);} while (0)
+#define DBNC_BTN(BTN_CHK) do {delay_ms(DBNC_DELAY_MS); while (BTN_CHK);} while (0)
 #define NORM_INPUT(A, AMIN, AMAX) LERP(A, AMIN, AMAX, -MAX_DELTA_POS, (float)MAX_DELTA_POS)
 
 /* Public functions' prototypes -----------------------------------------------*/
@@ -31,10 +31,9 @@ static void state_xlda(void);
 static void state_auto(void);
 
 /* Private variables ----------------------------------------------------------*/
-static bool xlda_on;
 static void (*current_state)(void) = state_init;
 static struct point current_pos = INITIAL_POSITION;
-static const struct point figure[] = AUTO_MODE_POINTS;
+static const struct point auto_array[] = AUTO_MODE_POINTS;
 
 /**
  * @brief  The application entry point
@@ -55,8 +54,6 @@ static void state_init(void)
 {
     lcd_init();
     sv_init();
-    jstk_init();
-    xlda_on = xlda_init() == I2C_ACK;
     state_idle();
 }
 
@@ -106,11 +103,13 @@ static void state_jstk(void)
         lcd_setcolor(LCD_CYAN);
         lcd_puts_at("JSTK Mode", LCD_CLEAR);
         lcd_puts_at("BUT.C:Exit", LCD_ROWFOUR);
+        jstk_init();
         return;
     }
 
     if (BTNC_CHK) {
         DBNC_BTN(BTNC_CHK);
+        jstk_disable();
         state_idle();
         return;
     }
@@ -132,8 +131,8 @@ static void state_jstk(void)
     else
         current_pos.y += dy;
 
-    if (JSTK_RIGHT_BTN_CHK) {
-        DBNC_BTN(JSTK_RIGHT_BTN_CHK);
+    if (JSTK_TIP_BTN_CHK) {
+        DBNC_BTN(JSTK_TIP_BTN_CHK);
         current_pos.z = !current_pos.z;
     }
 
@@ -151,21 +150,24 @@ static void state_xlda(void)
 {
     float dx, dy;
     int8_t readout[ACCEL_REGS];
+    static i2c_status_t init_nack;
     if (current_state != state_xlda) {
         current_state = state_xlda;
         lcd_setcolor(LCD_CYAN);
         lcd_puts_at("XLDA Mode", LCD_CLEAR);
         lcd_puts_at("BUT.C:Exit", LCD_ROWFOUR);
+        init_nack = xlda_init(CTRL1_ON_VAL);
         return;
     }
 
     if (BTNC_CHK) {
         DBNC_BTN(BTNC_CHK);
+        xlda_init(CTRL1_OFF_VAL);
         state_idle();
         return;
     }
 
-    if (!xlda_on || xlda_read(readout) != I2C_ACK) {
+    if (init_nack || xlda_read(readout)) {
         lcd_puts_at("I2C_ERR", LCD_ROWTWO);
         return;
     }
@@ -191,7 +193,7 @@ static void state_xlda(void)
 }
 
 /**
- * @brief Control the SCARA arm using the points in "figure" array
+ * @brief Control the SCARA arm using the points in auto_array
  * @retval None
  */
 static void state_auto(void)
@@ -206,8 +208,8 @@ static void state_auto(void)
         return;
     }
 
-    for (p_cnt = 0; p_cnt != ARR_SIZE(figure); p_cnt++) {
-        if(!sv_move(&figure[p_cnt])) {
+    for (p_cnt = 0; p_cnt != ARR_SIZE(auto_array); p_cnt++) {
+        if(!sv_move(&auto_array[p_cnt])) {
             lcd_puts_at("Bad Coord.", LCD_ROWTWO);
             delay_ms(ERR_DELAY_MS);
             break;
