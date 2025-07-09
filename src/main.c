@@ -83,7 +83,7 @@ static void state_idle(void)
         return;
     }
 
-    if (xlda_on && BTNB_CHK) {
+    if (BTNB_CHK) {
         state_xlda();
         return;
     }
@@ -145,6 +145,7 @@ static void state_jstk(void)
 static void state_xlda(void)
 {
     float dx, dy;
+    int8_t readout[ACCEL_REGS];
     if (current_state != state_xlda) {
         current_state = state_xlda;
         lcd_setcolor(LCD_CYAN);
@@ -159,19 +160,24 @@ static void state_xlda(void)
         return;
     }
 
-    dx = NORM_INPUT(xlda_read(X_ACC), XLDA_X_MIN, XLDA_X_MAX);
+    if (!xlda_on || xlda_read(readout) != I2C_ACK) {
+        lcd_puts("I2C_ERR", LCD_ROWTWO);
+        return;
+    }
+
+    dx = NORM_INPUT(readout[X_ACCEL_H], XLDA_X_MIN, XLDA_X_MAX);
     if (fabsf(dx) < XLDA_THRSH * MAX_DELTA_POS)
         dx = 0;
     else
         current_pos.x += dx;
 
-    dy = NORM_INPUT(xlda_read(Y_ACC), XLDA_Y_MIN, XLDA_Y_MAX);
+    dy = NORM_INPUT(readout[Y_ACCEL_H], XLDA_Y_MIN, XLDA_Y_MAX);
     if (fabsf(dy) < XLDA_THRSH * MAX_DELTA_POS)
         dy = 0;
     else
         current_pos.y += dy;
 
-    current_pos.z = xlda_read(Z_ACC) >= 0; // Tip down with non-negative g
+    current_pos.z = readout[Z_ACCEL_H] >= 0; // Tip down with non-negative g
 
     if (!sv_move(&current_pos)) {
         current_pos.x -= dx;
