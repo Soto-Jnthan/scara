@@ -77,7 +77,7 @@ static void lcd_4b_wrt(uint8_t byte)
 
 /**
  * @brief  Send byte as a command to the LCD
- * @param  cmd Command to be executed (LCD_NOP ignored)
+ * @param  cmd Command to be executed
  * @retval None
  */
 void lcd_cmd(uint8_t cmd)
