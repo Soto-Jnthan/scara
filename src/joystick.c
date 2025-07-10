@@ -17,10 +17,10 @@
  */
 void jstk_init(void)
 {
-    ADC0CON = 0x4F; // ADC0 set to full scale unipolar mode from AIN1 to AIN2 with XREF
-    ADC1CON = 0x58; // ADC0 set to unipolar mode from AIN4 to GND with XREF
-    SF = 0x0D;      // Max ADC Output Update Rate
-    ADCMODE = 0x33; // ADC0 and ADC1 powered on in continuous conversion mode
+    ADC0CON = JSTK_ADC0CON_VAL; 
+    ADC1CON = JSTK_ADC1CON_VAL; 
+    SF = JSTK_SF_VAL;      
+    ADCMODE = JSTK_ADCMODE_VAL; 
 }
 
 /**
