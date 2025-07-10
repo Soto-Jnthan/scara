@@ -22,7 +22,6 @@
 #define INITIAL_POSITION   {10, 10}
 #define MAX_DELTA_POS      0.5  // SCARA arm max movement step in centimeters (absolute value)
 #define AUTO_MODE_DELAY_MS 1000 // Delay between each auto mode step in milliseconds
-#define ERR_DELAY_MS       3000 // Early exit text display delay
 #define DBNC_DELAY_MS      5    // Button debounce delay in milliseconds
 #define BTNA_CHK           BTN1_CHK
 #define BTNB_CHK           BTN2_CHK
