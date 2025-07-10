@@ -23,7 +23,7 @@
 enum {X_ACCEL_L, X_ACCEL_H, Y_ACCEL_L, Y_ACCEL_H, Z_ACCEL_L, Z_ACCEL_H}; 
 
 /* Public functions' prototypes -----------------------------------------------*/
-i2c_status_t xlda_init(void);
+i2c_status_t xlda_init(uint8_t ctrl1);
 i2c_status_t xlda_read(int8_t pdata[static ACCEL_REGS]);
 
 #endif // ACCEL_H
