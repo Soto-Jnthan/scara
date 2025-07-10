@@ -84,6 +84,7 @@ static void state_idle(void)
     }
         
     if (BTNC_CHK) {
+        DBNC_BTN(BTNC_CHK);
         state_auto();
         return;
     }  
@@ -107,9 +108,9 @@ static void state_jstk(void)
     }
 
     if (BTNC_CHK) {
-        DBNC_BTN(BTNC_CHK);
         jstk_disable();
         state_idle();
+        DBNC_BTN(BTNC_CHK);
         return;
     }
 
@@ -161,9 +162,9 @@ static void state_xlda(void)
     }
 
     if (BTNC_CHK) {
-        DBNC_BTN(BTNC_CHK);
         xlda_init(CTRL1_OFF_VAL);
         state_idle();
+        DBNC_BTN(BTNC_CHK);
         return;
     }
 
@@ -205,15 +206,17 @@ static void state_auto(void)
         current_state = state_auto;
         lcd_setcolor(LCD_MAGENTA);
         lcd_puts_at("Auto Mode", LCD_CLEAR);
-        lcd_puts_at("In Progress", LCD_ROWFOUR);
+        lcd_puts_at("BUT.C:Exit", LCD_ROWFOUR);
+        lcd_puts_at("In Progress", LCD_ROWTHREE);
         lcd_cmd(LCD_DCBON);
         return;
     }
 
-    if (p_cnt == ARR_SIZE(auto_arr)) {
+    if (BTNC_CHK || p_cnt == ARR_SIZE(auto_arr)) {
         p_cnt = 0;
         lcd_cmd(LCD_DONCBOFF);
         state_idle();
+        DBNC_BTN(BTNC_CHK);
         return;
     }
 
