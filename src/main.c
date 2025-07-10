@@ -115,6 +115,7 @@ static void state_jstk(void)
     }
 
     if (jstk_read(readout) != ADC_OK) {
+        lcd_setcolor(LCD_RED);
         lcd_puts_at("ADC_ERR", LCD_ROWTWO);
         return;
     }
@@ -168,6 +169,7 @@ static void state_xlda(void)
     }
 
     if (init_nack || xlda_read(readout)) {
+        lcd_setcolor(LCD_RED);
         lcd_puts_at("I2C_ERR", LCD_ROWTWO);
         return;
     }
@@ -210,7 +212,8 @@ static void state_auto(void)
 
     for (p_cnt = 0; p_cnt != ARR_SIZE(auto_array); p_cnt++) {
         if(!sv_move(&auto_array[p_cnt])) {
-            lcd_puts_at("Bad Coord.", LCD_ROWTWO);
+            lcd_setcolor(LCD_RED);
+            lcd_puts_at("BAD_COORD.", LCD_ROWTWO);
             delay_ms(ERR_DELAY_MS);
             break;
         }
