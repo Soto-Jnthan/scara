@@ -15,6 +15,8 @@
 #define TX_MODE  1
 #define RX_MODE  0
 #define BYTE_BIT 8
+#define SPICON_OFF 0x00
+#define I2CCON_ON  0xA8 // Set I2CM and enter IDLE state
 
 /* Private macros -------------------------------------------------------------*/
 #define I2C_WR(ADDR) ((ADDR) << 1)
@@ -37,8 +39,8 @@ static uint8_t i2c_receivebyte(i2c_status_t reply_bit);
  */
 void i2c_init(void)
 {
-    SPICON = 0x00;
-    I2CCON = 0xA8; // Set I2CM and enter IDLE state
+    SPICON = SPICON_OFF;
+    I2CCON = I2CCON_ON;
 }
 
 /**

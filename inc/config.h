@@ -44,6 +44,10 @@ runtime transformations still needed for JSTK/XLDA modes */
 #define JSTK_RIGHT_BTN_CHK BTN5_CHK
 #define JSTK_LEFT_BTN_CHK  BTN4_CHK
 #define JSTK_TIP_BTN_CHK   JSTK_BACK_BTN_CHK
+#define JSTK_ADC0CON_VAL   0x4F // ADC0 set to full scale unipolar mode from AIN1 to AIN2 with XREF
+#define JSTK_ADC1CON_VAL   0x58 // ADC0 set to unipolar mode from AIN4 to GND with XREF
+#define JSTK_SF_VAL        0x0D // Max ADC Output Update Rate
+#define JSTK_ADCMODE_VAL   0x33 // ADC0 and ADC1 powered on in continuous conversion mode
 #define JSTK_X_MAX         200 // [0 <= JSTK_X_MIN <= JSTK_X_MAX <= 255]
 #define JSTK_X_MIN         55
 #define JSTK_Y_MAX         200 // [0 <= JSTK_Y_MIN <= JSTK_Y_MAX <= 255]
