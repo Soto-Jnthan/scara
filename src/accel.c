@@ -10,6 +10,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "accel.h"
+#include "lsm6ds33.h"
 
 /**
  * @brief Initialize the accelerometer of the LSM6DS33
