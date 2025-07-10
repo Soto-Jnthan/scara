@@ -33,7 +33,6 @@ static void state_auto(void);
 /* Private variables ----------------------------------------------------------*/
 static void (*current_state)(void) = state_init;
 static struct point current_pos = INITIAL_POSITION;
-static const struct point auto_array[] = AUTO_MODE_POINTS;
 
 /**
  * @brief  The application entry point
@@ -195,12 +194,13 @@ static void state_xlda(void)
 }
 
 /**
- * @brief Control the SCARA arm using the points in auto_array
+ * @brief Control the SCARA arm using AUTO_MODE_POINTS
  * @retval None
  */
 static void state_auto(void)
 {
-    uint8_t p_cnt;
+    static uint8_t p_cnt;
+    static const struct point auto_arr[] = AUTO_MODE_POINTS;
     if (current_state != state_auto) {
         current_state = state_auto;
         lcd_setcolor(LCD_MAGENTA);
@@ -210,18 +210,19 @@ static void state_auto(void)
         return;
     }
 
-    for (p_cnt = 0; p_cnt != ARR_SIZE(auto_array); p_cnt++) {
-        if(!sv_move(&auto_array[p_cnt])) {
-            lcd_setcolor(LCD_RED);
-            lcd_puts_at("BAD_COORD.", LCD_ROWTWO);
-            delay_ms(ERR_DELAY_MS);
-            break;
-        }
-        delay_ms(AUTO_MODE_DELAY_MS);
+    if (p_cnt == ARR_SIZE(auto_arr)) {
+        p_cnt = 0;
+        lcd_cmd(LCD_DONCBOFF);
+        state_idle();
+        return;
     }
 
-    lcd_cmd(LCD_DONCBOFF);
-    state_idle();
+    if (!sv_move(&auto_arr[p_cnt++])) {
+        lcd_setcolor(LCD_RED);
+        lcd_puts_at("BAD_COORD.", LCD_ROWTWO);
+    }
+
+    delay_ms(AUTO_MODE_DELAY_MS);
 }
 
 /**
