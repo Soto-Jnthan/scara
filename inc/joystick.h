@@ -27,17 +27,14 @@ enum {ADC_OK, ADC_ERR};
 
 /* Public functions' prototypes ----------------------------------------------*/
 void jstk_init(void);
-adc_status_t jstk_read(uint8_t pdata[static ADC_REGS]);
+adc_status_t jstk_read(uint8_t p_data[/*static ADC_REGS*/]);
 
-/* Public inline functions' definitions --------------------------------------*/
+/* Private macros -------------------------------------------------------------*/
 
 /**
  * @brief Turn off the ADCs connected to the joystick
  * @retval None
  */
-inline void jstk_disable(void)
-{
-    ADCMODE &= ~(ADC0EN | ADC1EN);
-}
+#define JSTK_DISABLE() do {ADCMODE = JSTK_ADCOFF_VAL;} while(0)
 
 #endif // JOYSTICK_H

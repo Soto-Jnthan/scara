@@ -80,29 +80,19 @@ void lcd_cmd(uint8_t cmd);
 void lcd_putchar(char c);
 void lcd_puts(const char *str);
 
-/* Public inline functions' definitions --------------------------------------*/
+/* Private macros -------------------------------------------------------------*/
 
 /**
  * @brief  Turn on/off the LEDs of the LCD
- * @param  c Specify LEDs to be turned on via enum LCD_Color
- * @retval None
+ * @param  c Specify LEDs to be turned on via enum lcd_color
  */
-inline void lcd_setcolor(enum lcd_color c)
-{
-    PORT_LCD_LED &= ~c;
-    PORT_LCD_LED |= c ^ LCD_WHITE;
-}
+#define LCD_SETCOLOR(c) do {PORT_LCD_LED &= ~c; PORT_LCD_LED |= c ^ LCD_WHITE;} while (0)
 
 /**
  * @brief  Send a command and a null-terminated string to the LCD
  * @param  str Pointer to null-terminated array of characters
- * @param  cmd Command to be executed before sending the array
- * @retval None
+ * @param  cmd Command to be executed before sending array
  */
-inline void lcd_puts_at(const char *str, uint8_t cmd)
-{
-    lcd_cmd(cmd);
-    lcd_puts(str);
-}
+#define LCD_PUTS_AT(str, cmd) do {lcd_cmd(cmd); lcd_puts(str);} while (0)
 
 #endif // LCD_H

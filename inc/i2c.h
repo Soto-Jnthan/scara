@@ -15,28 +15,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "utils.h"
 
-/* Public defines ------------------------------------------------------------*/
-#define BYTE_MSB_MASK 0x80U
-
 /* Public typedefs/enums -----------------------------------------------------*/
 typedef bool i2c_status_t;
 enum {I2C_ACK, I2C_NACK};
 
 /* Public functions' prototypes ----------------------------------------------*/
 void i2c_init(void);
-i2c_status_t i2c_memwrite(uint8_t devaddr, uint8_t memaddr, const uint8_t *pdata, uint8_t datalen);
-i2c_status_t i2c_memread(uint8_t devaddr, uint8_t memaddr, uint8_t *pdata, uint8_t datalen);
-
-/* Public inline functions' definitions --------------------------------------*/
-
-inline i2c_status_t i2c_write(uint8_t devaddr, const uint8_t *pdata, uint8_t datalen)
-{
-    return i2c_memwrite(devaddr | BYTE_MSB_MASK, 0, pdata, datalen);
-}
-
-inline i2c_status_t i2c_read(uint8_t devaddr, uint8_t *pdata, uint8_t datalen)
-{
-    return i2c_memread(devaddr | BYTE_MSB_MASK, 0, pdata, datalen);
-}
+i2c_status_t i2c_memwrite(uint8_t devaddr, uint8_t memaddr, const uint8_t *p_data, uint8_t datalen);
+i2c_status_t i2c_memread(uint8_t devaddr, uint8_t memaddr, uint8_t *p_data, uint8_t datalen);
 
 #endif // I2C_H
