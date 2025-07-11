@@ -19,6 +19,7 @@
 /* Public defines ------------------------------------------------------------*/
 #define MAX_ANGLE     PI  // Rad
 #define MIN_ANGLE     0.0 // Rad
+#define TF2_VECTOR    5
 
 #define SV_MIN_CNT    US_TO_MC(SV_MIN_US_PULSE)
 #define SV_MAX_CNT    US_TO_MC(SV_MAX_US_PULSE)

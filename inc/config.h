@@ -18,11 +18,11 @@
 /* Public defines ------------------------------------------------------------*/
 
 /* main config definitions: */
-#define PLLCON_INIT_VAL    0x00     // Must be assigned to PLLCON at application entry
+#define CORE_CLK_FREQ      12 // MHz
 #define INITIAL_POSITION   {10, 10}
-#define MAX_DELTA_POS      0.5      // SCARA arm max movement step in centimeters (absolute value)
-#define AUTO_MODE_DELAY_MS 1000     // Delay between each auto mode step in milliseconds
-#define DBNC_DELAY_MS      5        // Button debounce delay in milliseconds
+#define MAX_DELTA_POS      0.5  // SCARA arm max movement step in centimeters (absolute value)
+#define AUTO_MODE_DELAY_MS 1000 // Delay between each auto mode step in milliseconds
+#define DBNC_DELAY_MS      5    // Button debounce delay in milliseconds
 #define BTNA_CHK           BTN1_CHK
 #define BTNB_CHK           BTN2_CHK
 #define BTNC_CHK           BTN4_CHK
@@ -39,20 +39,17 @@
 runtime transformations still needed for JSTK/XLDA modes */
 
 /* joystick config definitions: */
+#define ADS1015_ADDR_VAL   0
 #define JSTK_FRONT_BTN_CHK BTN2_CHK
 #define JSTK_BACK_BTN_CHK  BTN3_CHK
 #define JSTK_RIGHT_BTN_CHK BTN5_CHK
 #define JSTK_LEFT_BTN_CHK  BTN4_CHK
 #define JSTK_TIP_BTN_CHK   JSTK_BACK_BTN_CHK
-#define JSTK_ADC0CON_VAL   0x4F // ADC0 set to full scale unipolar mode from AIN1 to AIN2 with XREF
-#define JSTK_ADC1CON_VAL   0x58 // ADC0 set to unipolar mode from AIN4 to GND with XREF
-#define JSTK_SF_VAL        0x0D // Max ADC Output Update Rate
-#define JSTK_ADCMODE_VAL   0x33 // ADC0 and ADC1 powered on in continuous conversion mode
-#define JSTK_X_MAX         200  // [0 <= JSTK_X_MIN <= JSTK_X_MAX <= 255]
-#define JSTK_X_MIN         55
-#define JSTK_Y_MAX         200  // [0 <= JSTK_Y_MIN <= JSTK_Y_MAX <= 255]
-#define JSTK_Y_MIN         55
-#define JSTK_THRSH         0.1  // Joystick input threshold (between 0 and 1.0)
+#define JSTK_X_MAX         104 // [0 <= JSTK_X_MIN <= JSTK_X_MAX <= 255]
+#define JSTK_X_MIN         0
+#define JSTK_Y_MAX         104 // [0 <= JSTK_Y_MIN <= JSTK_Y_MAX <= 255]
+#define JSTK_Y_MIN         0
+#define JSTK_THRSH         0.1 // Joystick input threshold (between 0 and 1.0)
 
 /* accel config definitions: */
 #define LSM6DS_A0_VAL 1
