@@ -4,7 +4,7 @@
  * @author  J.Soto
  * @version V1.2.0
  * @date    Nov 11th, 2023
- * @brief   This file contains the config defines for the SCARA project
+ * @brief   This file contains the config definitions for the SCARA project
  ******************************************************************************
  */
 

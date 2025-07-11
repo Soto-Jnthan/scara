@@ -19,12 +19,8 @@
 #define LCD_MAX_BUSY_DELAY_MS 2  // 1.52mS
 #define LCD_REWRITE_DELAY_MS  1  // 100uS
 
-/* Private macros -------------------------------------------------------------*/
-#define SWAP_NIBS(A) ((A) >> 4 | (A) << 4) // Compiler uses SWAP opcode
-#define LCD_SET_E()  PORT_LCD_CTRL |= LCD_E_PIN_MASK
-#define LCD_CLR_E()  PORT_LCD_CTRL &= ~LCD_E_PIN_MASK
-#define LCD_SET_RS() PORT_LCD_CTRL |= LCD_RS_PIN_MASK
-#define LCD_CLR_RS() PORT_LCD_CTRL &= ~LCD_RS_PIN_MASK
+/* Private inline functions' definitions ---------------------------------------*/
+inline uint8_t swap_nibs(uint8_t a) {return a >> 4 | a << 4;} // Compiler uses SWAP opcode
 
 /* Imported functions' prototypes ---------------------------------------------*/
 extern void delay_ms(uint16_t ms_cnt);
@@ -40,16 +36,16 @@ void lcd_init(void)
 {
     delay_ms(LCD_POWER_ON_DELAY_MS);
 
-    LCD_CLR_RS();
+    LCD_RS_SBIT = 0;
     lcd_4b_wrt(LCD_8BIT1LX8);
     delay_ms(LCD_FUNC_SET_DELAY_MS);
 
-    LCD_SET_E();
-    LCD_CLR_E();
+    LCD_E_SBIT = 1;
+    LCD_E_SBIT = 0;
     delay_ms(LCD_REWRITE_DELAY_MS);
 
-    LCD_SET_E();
-    LCD_CLR_E();
+    LCD_E_SBIT = 1;
+    LCD_E_SBIT = 0;
     delay_ms(LCD_REWRITE_DELAY_MS);
 
     lcd_4b_wrt(LCD_4BIT1LX8);
@@ -69,10 +65,10 @@ void lcd_init(void)
  */
 static void lcd_4b_wrt(uint8_t byte)
 {
-    LCD_SET_E();
+    LCD_E_SBIT = 1;
     PORT_LCD_D &= ~HIGH_NIB_MASK;
     PORT_LCD_D |= byte & HIGH_NIB_MASK;
-    LCD_CLR_E();
+    LCD_E_SBIT = 0;
 }
 
 /**
@@ -82,9 +78,9 @@ static void lcd_4b_wrt(uint8_t byte)
  */
 void lcd_cmd(uint8_t cmd)
 {
-    LCD_CLR_RS();
+    LCD_RS_SBIT = 0;
     lcd_4b_wrt(cmd);
-    lcd_4b_wrt(SWAP_NIBS(cmd));
+    lcd_4b_wrt(swap_nibs(cmd));
     delay_ms(LCD_MAX_BUSY_DELAY_MS);
 }
 
@@ -95,9 +91,9 @@ void lcd_cmd(uint8_t cmd)
  */
 void lcd_putchar(char c)
 {
-    LCD_SET_RS();
+    LCD_RS_SBIT = 1;
     lcd_4b_wrt(c);
-    lcd_4b_wrt(SWAP_NIBS(c));
+    lcd_4b_wrt(swap_nibs(c));
     delay_ms(LCD_REWRITE_DELAY_MS);
 }
 
