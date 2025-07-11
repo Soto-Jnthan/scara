@@ -28,7 +28,7 @@
 
 ## Overview
 
-This project implements firmware for a SCARA Robot controlled via an [ADuC834](https://www.analog.com/media/en/technical-documentation/data-sheets/ADUC834.pdf), an 8051-compatible microcontroller . It supports interactive joystick control, motion tracking via an accelerometer and autonomous movement. The system is designed for educational embedded robotics applications, originally conceived as a project in Warsaw University of Technology's course for microcontrollers.
+This project implements firmware for a SCARA Robot controlled via an [ADuC834](https://www.analog.com/media/en/technical-documentation/data-sheets/ADUC834.pdf), an 8051-compatible microcontroller. It supports interactive joystick control, motion tracking via an accelerometer and autonomous movement. The system is designed for educational embedded robotics applications, originally conceived as a project in Warsaw University of Technology's course for microcontrollers.
 
 An illustration of the SCARA Robot configuration is presented [here](https://www.desmos.com/calculator/3ebmf7hpk8) as an interactive Desmos graph.
 
