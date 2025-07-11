@@ -2,9 +2,9 @@
  ******************************************************************************
  * @file    utils.h
  * @author  J.Soto
- * @version V1.2.0
- * @date    Nov 11th, 2023
- * @brief   This file contains the common defines of the application
+ * @version V1.3.0
+ * @date    July 11th, 2025
+ * @brief   This file contains the common definitions of the application
  ******************************************************************************
  */
 

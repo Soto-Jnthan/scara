@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    i2c.c
  * @author  J.Soto
- * @version V1.2.0
- * @date    Nov 11th, 2023
+ * @version V1.3.0
+ * @date    July 11th, 2025
  * @brief   Inter-Integrated Circuit (I2C) Driver Software
  ******************************************************************************
  */
@@ -12,9 +12,9 @@
 #include "i2c.h"
 
 /* Private defines -----------------------------------------------------------*/
-#define TX_MODE  1
-#define RX_MODE  0
-#define BYTE_BIT 8
+#define TX_MODE    1
+#define RX_MODE    0
+#define BYTE_BIT   8
 #define SPICON_OFF 0x00
 #define I2CCON_ON  0xA8 // Set I2CM and enter IDLE state
 

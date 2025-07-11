@@ -2,9 +2,9 @@
  ******************************************************************************
  * @file    ADuC834.h
  * @author  J.Soto
- * @version V1.2.0
- * @date    Nov 11th, 2023
- * @brief   This file contains the defines for ADuC834's SFRs
+ * @version V1.3.0
+ * @date    July 11th, 2025
+ * @brief   This file contains the definitions for ADuC834's SFRs
  ******************************************************************************
  */
 

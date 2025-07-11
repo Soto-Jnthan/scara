@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    lcd.h
  * @author  J.Soto
- * @version V1.2.0
- * @date    Nov 11th, 2023
+ * @version V1.3.0
+ * @date    July 11th, 2025
  * @brief   Header for lcd.c file
  ******************************************************************************
  */
@@ -65,13 +65,13 @@ enum lcd_command {
 
 enum lcd_color {
     LCD_NOLEDS,
-    LCD_RED     = LCD_RED_LED_MASK, // RGB
-    LCD_GREEN   = LCD_GREEN_LED_MASK,
-    LCD_BLUE    = LCD_BLUE_LED_MASK,
-    LCD_CYAN    = LCD_GREEN | LCD_BLUE, // CMY
+    LCD_RED = LCD_RED_LED_MASK, // RGB
+    LCD_GREEN = LCD_GREEN_LED_MASK,
+    LCD_BLUE = LCD_BLUE_LED_MASK,
+    LCD_CYAN = LCD_GREEN | LCD_BLUE, // CMY
     LCD_MAGENTA = LCD_RED | LCD_BLUE,
-    LCD_YELLOW  = LCD_RED | LCD_GREEN,
-    LCD_WHITE   = LCD_RED | LCD_GREEN | LCD_BLUE
+    LCD_YELLOW = LCD_RED | LCD_GREEN,
+    LCD_WHITE = LCD_RED | LCD_GREEN | LCD_BLUE
 };
 
 /* Public functions' prototypes ----------------------------------------------*/

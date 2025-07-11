@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    servo.c
  * @author  J.Soto
- * @version V1.2.0
- * @date    Nov 11th, 2023
+ * @version V1.3.0
+ * @date    July 11th, 2025
  * @brief   Servomotor Driver Software
  ******************************************************************************
  */
@@ -19,8 +19,8 @@
 /* Private variables ----------------------------------------------------------*/
 static uint16_t sv_rcap[] = { // Timer values of servos (2s comp. of machine cycles)
     [BASE] = -SV_MID_CNT,
-    [MID]  = -SV_MID_CNT,
-    [TIP]  = -SV_MIN_CNT
+    [MID] = -SV_MID_CNT,
+    [TIP] = -SV_MIN_CNT
 };
 
 /**
@@ -82,34 +82,34 @@ bool sv_move(const struct point *p)
 void sv_isr(void) __interrupt(TF2_VECTOR) __naked
 {
     __asm CLR TF2
-   jnb PORT_SV + SV1_PIN, $base
-   jnb PORT_SV + SV2_PIN, $mid
-   jnb PORT_SV + SV3_PIN, $tip __endasm;
-   
-   PORT_SV ^= GET_SV_MASK(BASE);
-   RCAP2H = HIGHBYTE(sv_rcap[MID]);
-   RCAP2L = LOWBYTE(sv_rcap[MID]);
-   __asm reti
+    jnb PORT_SV + SV1_PIN, $base
+    jnb PORT_SV + SV2_PIN, $mid
+    jnb PORT_SV + SV3_PIN, $tip __endasm;
 
-   $base: __endasm;
-   BRANCH_DELAY(); // Ensure same ON/OFF timing
-   BRANCH_DELAY();
-   PORT_SV ^= GET_SV_MASK(BASE) | GET_SV_MASK(MID);
-   RCAP2H = HIGHBYTE(sv_rcap[TIP]);
-   RCAP2L = LOWBYTE(sv_rcap[TIP]);
-   __asm reti
+    PORT_SV ^= GET_SV_MASK(BASE);
+    RCAP2H = HIGHBYTE(sv_rcap[MID]);
+    RCAP2L = LOWBYTE(sv_rcap[MID]);
+    __asm reti
 
-   $mid: __endasm;
-   BRANCH_DELAY();
-   PORT_SV ^= GET_SV_MASK(MID) | GET_SV_MASK(TIP);
-   RCAP2H = HIGHBYTE(-SV_PERIOD_CNT);
-   RCAP2L = LOWBYTE(-SV_PERIOD_CNT);
-   __asm reti
+    $base : __endasm;
+    BRANCH_DELAY(); // Ensure same ON/OFF timing
+    BRANCH_DELAY();
+    PORT_SV ^= GET_SV_MASK(BASE) | GET_SV_MASK(MID);
+    RCAP2H = HIGHBYTE(sv_rcap[TIP]);
+    RCAP2L = LOWBYTE(sv_rcap[TIP]);
+    __asm reti
 
-   $tip: __endasm;
-   /* Reset all to fix duty cycle inversion if pins were altered */
-   PORT_SV |= GET_SV_MASK(BASE) | GET_SV_MASK(MID) | GET_SV_MASK(TIP);
-   RCAP2H = HIGHBYTE(sv_rcap[BASE]);
-   RCAP2L = LOWBYTE(sv_rcap[BASE]);
-   __asm reti __endasm;
+    $mid : __endasm;
+    BRANCH_DELAY();
+    PORT_SV ^= GET_SV_MASK(MID) | GET_SV_MASK(TIP);
+    RCAP2H = HIGHBYTE(-SV_PERIOD_CNT);
+    RCAP2L = LOWBYTE(-SV_PERIOD_CNT);
+    __asm reti
+
+    $tip : __endasm;
+    /* Reset all to fix duty cycle inversion if pins were altered */
+    PORT_SV |= GET_SV_MASK(BASE) | GET_SV_MASK(MID) | GET_SV_MASK(TIP);
+    RCAP2H = HIGHBYTE(sv_rcap[BASE]);
+    RCAP2L = LOWBYTE(sv_rcap[BASE]);
+    __asm reti __endasm;
 }

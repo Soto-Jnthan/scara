@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    config.h
  * @author  J.Soto
- * @version V1.2.0
- * @date    Nov 11th, 2023
+ * @version V1.3.0
+ * @date    July 11th, 2025
  * @brief   This file contains the config definitions for the SCARA project
  ******************************************************************************
  */
@@ -18,11 +18,11 @@
 /* Public defines ------------------------------------------------------------*/
 
 /* main config definitions: */
-#define PLLCON_INIT_VAL    0x00 // Must be assigned to PLLCON at application entry
+#define PLLCON_INIT_VAL    0x00     // Must be assigned to PLLCON at application entry
 #define INITIAL_POSITION   {10, 10}
-#define MAX_DELTA_POS      0.5  // SCARA arm max movement step in centimeters (absolute value)
-#define AUTO_MODE_DELAY_MS 1000 // Delay between each auto mode step in milliseconds
-#define DBNC_DELAY_MS      5    // Button debounce delay in milliseconds
+#define MAX_DELTA_POS      0.5      // SCARA arm max movement step in centimeters (absolute value)
+#define AUTO_MODE_DELAY_MS 1000     // Delay between each auto mode step in milliseconds
+#define DBNC_DELAY_MS      5        // Button debounce delay in milliseconds
 #define BTNA_CHK           BTN1_CHK
 #define BTNB_CHK           BTN2_CHK
 #define BTNC_CHK           BTN4_CHK
@@ -48,30 +48,30 @@ runtime transformations still needed for JSTK/XLDA modes */
 #define JSTK_ADC1CON_VAL   0x58 // ADC0 set to unipolar mode from AIN4 to GND with XREF
 #define JSTK_SF_VAL        0x0D // Max ADC Output Update Rate
 #define JSTK_ADCMODE_VAL   0x33 // ADC0 and ADC1 powered on in continuous conversion mode
-#define JSTK_X_MAX         200 // [0 <= JSTK_X_MIN <= JSTK_X_MAX <= 255]
+#define JSTK_X_MAX         200  // [0 <= JSTK_X_MIN <= JSTK_X_MAX <= 255]
 #define JSTK_X_MIN         55
-#define JSTK_Y_MAX         200 // [0 <= JSTK_Y_MIN <= JSTK_Y_MAX <= 255]
+#define JSTK_Y_MAX         200  // [0 <= JSTK_Y_MIN <= JSTK_Y_MAX <= 255]
 #define JSTK_Y_MIN         55
-#define JSTK_THRSH         0.1 // Joystick input threshold (between 0 and 1.0)
+#define JSTK_THRSH         0.1  // Joystick input threshold (between 0 and 1.0)
 
 /* accel config definitions: */
 #define LSM6DS_A0_VAL 1
-#define CTRL1_ON_VAL  0x50 // 208 Hz (normal mode) 
+#define CTRL1_ON_VAL  0x50 // 208 Hz (normal mode)
 #define CTRL1_OFF_VAL 0
-#define XLDA_X_MAX    127 // [-128 <= XLDA_X_MIN <= XLDA_X_MAX <= 127]
+#define XLDA_X_MAX    127  // [-128 <= XLDA_X_MIN <= XLDA_X_MAX <= 127]
 #define XLDA_X_MIN    -128
-#define XLDA_Y_MAX    127 // [-128 <= XLDA_Y_MIN <= XLDA_Y_MAX <= 127]
+#define XLDA_Y_MAX    127  // [-128 <= XLDA_Y_MIN <= XLDA_Y_MAX <= 127]
 #define XLDA_Y_MIN    -128
-#define XLDA_THRSH    0.1 // Accelerometer input threshold (between 0 and 1.0)
+#define XLDA_THRSH    0.1  // Accelerometer input threshold (between 0 and 1.0)
 
 /* lcd config definitions: */
 #define LCD_COLUMNS_PER_ROW 12
 
 /* servo config definitions: */
-#define SV_L1           8.0    // Arm length of 'base' servo (in centimeters)
-#define SV_L2           9.0    // Arm length of 'mid' servo (in centimeters)
-#define SV_MAX_US_PULSE 2000.0 // HIGH pulse time for maximum angle in microseconds
-#define SV_MIN_US_PULSE 1000.0 // HIGH pulse time for minimum angle in microseconds
-#define SV_FREQUENCY    50.0   // Hz
+#define SV_L1            8.0    // Arm length of 'base' servo (in centimeters)
+#define SV_L2            9.0    // Arm length of 'mid' servo (in centimeters)
+#define SV_MAX_US_PULSE  2000.0 // HIGH pulse time for maximum angle in microseconds
+#define SV_MIN_US_PULSE  1000.0 // HIGH pulse time for minimum angle in microseconds
+#define SV_FREQUENCY     50.0   // Hz
 
 #endif // CONFIG_H
