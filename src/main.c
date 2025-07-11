@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    main.c
  * @author  J.Soto
- * @version V1.2.0
- * @date    Nov 11th, 2023
+ * @version V1.3.0
+ * @date    July 11th, 2025
  * @brief   SCARA Robot Controller Application
  ******************************************************************************
  */
@@ -82,12 +82,12 @@ static void state_idle(void)
         state_xlda();
         return;
     }
-        
+
     if (BTNC_CHK) {
         DBNC_BTN(BTNC_CHK);
         state_auto();
         return;
-    }  
+    }
 }
 
 /**

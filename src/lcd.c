@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    lcd.c
  * @author  J.Soto
- * @version V1.2.0
- * @date    Nov 11th, 2023
+ * @version V1.3.0
+ * @date    July 11th, 2025
  * @brief   Liquid Crystal Display (LCD) Driver Software
  ******************************************************************************
  */
@@ -50,7 +50,7 @@ void lcd_init(void)
 
     lcd_4b_wrt(LCD_4BIT1LX8);
     delay_ms(LCD_REWRITE_DELAY_MS);
-    
+
     lcd_cmd(LCD_4BIT2LX8);
     lcd_cmd(LCD_DCBOFF);
     lcd_cmd(LCD_CLEAR);

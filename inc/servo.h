@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    servo.h
  * @author  J.Soto
- * @version V1.2.0
- * @date    Nov 11th, 2023
+ * @version V1.3.0
+ * @date    July 11th, 2025
  * @brief   Header for servo.c file
  ******************************************************************************
  */
@@ -25,8 +25,8 @@
 #define SV_MID_CNT    US_TO_MC((SV_MAX_US_PULSE + SV_MIN_US_PULSE) / 2.0)
 #define SV_PERIOD_CNT (US_TO_MC(1e6 / SV_FREQUENCY) - 2 * SV_MID_CNT)
 
-#define SV_MIN_EXCT  (SV_MIN_US_PULSE * CORE_CLK_FREQ / 12)
-#define SV_MAX_EXCT  (SV_MAX_US_PULSE * CORE_CLK_FREQ / 12)
+#define SV_MIN_EXCT   (SV_MIN_US_PULSE * CORE_CLK_FREQ / 12)
+#define SV_MAX_EXCT   (SV_MAX_US_PULSE * CORE_CLK_FREQ / 12)
 
 /* Public macros --------------------------------------------------------------*/
 #define SV_RTOC(A) ((uint16_t)(LERP(A, MIN_ANGLE, MAX_ANGLE, SV_MIN_EXCT, SV_MAX_EXCT) + 0.5))

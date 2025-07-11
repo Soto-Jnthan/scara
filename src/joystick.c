@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    joystick.c
  * @author  J.Soto
- * @version V1.2.0
- * @date    Nov 11th, 2023
+ * @version V1.3.0
+ * @date    July 11th, 2025
  * @brief   Joystick Driver Software
  ******************************************************************************
  */
@@ -17,10 +17,10 @@
  */
 void jstk_init(void)
 {
-    ADC0CON = JSTK_ADC0CON_VAL; 
-    ADC1CON = JSTK_ADC1CON_VAL; 
-    SF = JSTK_SF_VAL;      
-    ADCMODE = JSTK_ADCMODE_VAL; 
+    ADC0CON = JSTK_ADC0CON_VAL;
+    ADC1CON = JSTK_ADC1CON_VAL;
+    SF = JSTK_SF_VAL;
+    ADCMODE = JSTK_ADCMODE_VAL;
 }
 
 /**

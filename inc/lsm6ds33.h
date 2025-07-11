@@ -2,9 +2,9 @@
  ******************************************************************************
  * @file    lsm6ds33.h
  * @author  J.Soto
- * @version V1.2.0
- * @date    Nov 11th, 2023
- * @brief   This file contains the defines to interface the LSM6DS33
+ * @version V1.3.0
+ * @date    July 11th, 2025
+ * @brief   This file contains the definitions to interface the LSM6DS33
  ******************************************************************************
  */
 
