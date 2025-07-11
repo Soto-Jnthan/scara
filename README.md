@@ -37,16 +37,16 @@ An illustration of the SCARA Robot configuration is presented [here](https://www
 ## Features
 
 - **Modular Peripheral Support**
-  - Joystick input for manual control (read using ADCs)
-  - Accelerometer-based gesture control ([LSM6DS33](https://www.pololu.com/file/0J1087/LSM6DS33.pdf) read using I2C)
-  - LCD screen feedback and mode display
-  - Asynchronous control of servo motors with minimal signal jitter
+  - Joystick input for manual control (read using ADCs).
+  - Accelerometer-based gesture control ([LSM6DS33](https://www.pololu.com/file/0J1087/LSM6DS33.pdf) read using I2C).
+  - LCD screen feedback and mode display.
+  - Asynchronous control of servo motors with minimal signal jitter.
 - **State Machine Architecture**
-  - Idle, Joystick, Accelerometer, and Auto modes
+  - Idle, Joystick, Accelerometer, and Auto modes.
 - **Autonomous Pattern Execution**
-  - Custom pre-programmed path using an array of points (defined in `inc/config.h`)
+  - Custom pre-programmed path using an array of points (defined in [inc/config.h](https://github.com/Soto-Jnthan/scara/blob/main/inc/config.h)).
 - **Robust Safety & Feedback**
-  - Tip control, range checking, and on-screen alerts for invalid positions
+  - Tip control, range checking, and on-screen alerts for invalid positions.
 
 ---
 
@@ -57,8 +57,8 @@ An illustration of the SCARA Robot configuration is presented [here](https://www
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/scara-robot-controller.git
-cd scara-robot-controller
+git clone https://github.com/Soto-Jnthan/scara.git
+cd scara
 ```
 
 2. Compile the project using the provided Makefile:
@@ -69,13 +69,13 @@ make all
 
 3. The compiled output (`release.hex`) will be located in the `build/` directory.
 
-Additionally, this repository is compatible with the [EIDE](https://marketplace.visualstudio.com/items?itemName=CL.eide) extension available for Visual Studio Code.
+There are optional branches for [keil-c51](https://github.com/Soto-Jnthan/scara/tree/keil-c51) (limited by 4K ROM trial mode), [generic-8052](https://github.com/Soto-Jnthan/scara/tree/generic-8052) and [i2c-lcd](https://github.com/Soto-Jnthan/scara/tree/i2c-lcd).
 
 ---
 
 ## Usage
 
-Flash `build/release.hex` onto your ADuC834 microcontroller using your preferred flashing tool. Connect the required peripherals (joystick, LCD, accelerometer, servo drivers and buttons as specified by `inc/lab_board.h`), then power on the system.
+Flash `build/release.hex` onto your ADuC834 microcontroller using your preferred flashing tool. Connect the required peripherals (joystick, LCD, accelerometer, servo drivers and buttons as specified by [inc/lab_board.h](https://github.com/Soto-Jnthan/scara/blob/main/inc/lab_board.h)), then power on the system.
 
 States:
 - **IDLE**: Waits for user input via buttons.
@@ -91,8 +91,8 @@ State transitions are triggered by hardware button inputs.
 
 - All compiled artifacts (`.rel`, `.lst`, `.hex`, etc.) are placed in `/build`.
 - The Makefile is SDCC-aware:
-  - Compiles each `.c` file individually
-  - Links `.rel` files with `main.rel` placed first as required by SDCC
+  - Compiles each `.c` file individually.
+  - Links `.rel` files with `main.rel` placed first as required by SDCC.
 - Clean with:
   ```bash
   make clean
