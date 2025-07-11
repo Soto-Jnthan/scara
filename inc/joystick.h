@@ -14,6 +14,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "utils.h"
+#include "i2c.h"
 
 /* Public defines ------------------------------------------------------------*/
 #define ADC_REGS (Y_AXIS + 1)
@@ -22,22 +23,8 @@
 typedef bool jstk_input_t;
 enum {X_AXIS, Y_AXIS};
 
-typedef bool adc_status_t;
-enum {ADC_OK, ADC_ERR};
-
 /* Public functions' prototypes ----------------------------------------------*/
 void jstk_init(void);
-adc_status_t jstk_read(uint8_t pdata[static ADC_REGS]);
-
-/* Public inline functions' definitions --------------------------------------*/
-
-/**
- * @brief Turn off the ADCs connected to the joystick
- * @retval None
- */
-inline void jstk_disable(void)
-{
-    ADCMODE &= ~(ADC0EN | ADC1EN);
-}
+i2c_status_t jstk_read(uint8_t pdata[static ADC_REGS]);
 
 #endif // JOYSTICK_H
