@@ -16,7 +16,7 @@
 #include "utils.h"
 
 /* Public typedefs/enums -----------------------------------------------------*/
-typedef struct {uint8_t x; uint8_t y;} jstk_out_t;
+typedef struct {uint8_t x, y;} jstk_out_t;
 
 typedef bool adc_status_t;
 enum {ADC_OK, ADC_ERR};

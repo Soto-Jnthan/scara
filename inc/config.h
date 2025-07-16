@@ -48,9 +48,9 @@ runtime transformations still needed for JSTK/XLDA modes */
 #define JSTK_ADC1CON_VAL   0x58 // ADC0 set to unipolar mode from AIN4 to GND with XREF
 #define JSTK_SF_VAL        0x0D // Max ADC Output Update Rate
 #define JSTK_ADCMODE_VAL   0x33 // ADC0 and ADC1 powered on in continuous conversion mode
-#define JSTK_X_MAX         200  // [0 <= JSTK_X_MIN <= JSTK_X_MAX <= 255]
+#define JSTK_X_MAX         200  // [0 ≤ JSTK_X_MIN ≤ JSTK_X_MAX ≤ 255]
 #define JSTK_X_MIN         55
-#define JSTK_Y_MAX         200  // [0 <= JSTK_Y_MIN <= JSTK_Y_MAX <= 255]
+#define JSTK_Y_MAX         200  // [0 ≤ JSTK_Y_MIN ≤ JSTK_Y_MAX ≤ 255]
 #define JSTK_Y_MIN         55
 #define JSTK_THRSH         0.1  // Joystick input threshold (between 0 and 1.0)
 
@@ -58,9 +58,9 @@ runtime transformations still needed for JSTK/XLDA modes */
 #define LSM6DS_A0_VAL 1
 #define CTRL1_ON_VAL  0x50   // 208 Hz (normal mode)
 #define CTRL1_OFF_VAL 0
-#define XLDA_X_MAX    32767  // [-32768 <= XLDA_X_MIN <= XLDA_X_MAX <= 32767] 
+#define XLDA_X_MAX    32767  // [-32768 ≤ XLDA_X_MIN ≤ XLDA_X_MAX ≤ 32767] 
 #define XLDA_X_MIN    -32768
-#define XLDA_Y_MAX    32767  // [-32768 <= XLDA_Y_MIN <= XLDA_Y_MAX <= 32767]
+#define XLDA_Y_MAX    32767  // [-32768 ≤ XLDA_Y_MIN ≤ XLDA_Y_MAX ≤ 32767]
 #define XLDA_Y_MIN    -32768 
 #define XLDA_THRSH    0.1    // Accelerometer input threshold (between 0 and 1.0)
 

@@ -33,7 +33,7 @@
 
 /* Public typedefs/enums ------------------------------------------------------*/
 typedef enum {BASE, MID, TIP} servo_t;
-typedef struct {float x; float y; _Bool z;} point_t;
+typedef struct {float x, y; _Bool z;} point_t;
 
 /* Public functions' prototypes -----------------------------------------------*/
 void sv_init(void);
