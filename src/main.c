@@ -18,7 +18,8 @@
 
 /* Private macros -------------------------------------------------------------*/
 #define DBNC_BTN(BTN_CHK) do {delay_ms(DBNC_DELAY_MS); while (BTN_CHK);} while (0)
-#define NORM_INPUT(A, AMIN, AMAX) LERP(A, AMIN, AMAX, -MAX_DELTA_POS, (float)MAX_DELTA_POS)
+#define ISUB(A, B) ((A) + (int16_t)~(B) + 1) // Avoid -INT_MIN integer promotion
+#define NORM_INT(A, MIN, MAX) (2.0 * MAX_DELTA / ISUB(MAX, MIN) * ISUB(A, MIN) - MAX_DELTA)
 
 /* Public functions' prototypes -----------------------------------------------*/
 void delay_ms(uint16_t ms_cnt);
@@ -120,14 +121,14 @@ static void state_jstk(void)
         return;
     }
 
-    dx = NORM_INPUT(readout[X_AXIS], JSTK_X_MIN, JSTK_X_MAX);
-    if (fabsf(dx) < JSTK_THRSH * MAX_DELTA_POS)
+    dx = NORM_INT(readout[X_AXIS], JSTK_X_MIN, JSTK_X_MAX);
+    if (fabsf(dx) < JSTK_THRSH * MAX_DELTA)
         dx = 0;
     else
         current_pos.x += dx;
 
-    dy = NORM_INPUT(readout[Y_AXIS], JSTK_Y_MIN, JSTK_Y_MAX);
-    if (fabsf(dy) < JSTK_THRSH * MAX_DELTA_POS)
+    dy = NORM_INT(readout[Y_AXIS], JSTK_Y_MIN, JSTK_Y_MAX);
+    if (fabsf(dy) < JSTK_THRSH * MAX_DELTA)
         dy = 0;
     else
         current_pos.y += dy;
@@ -150,7 +151,7 @@ static void state_jstk(void)
 static void state_xlda(void)
 {
     float dx, dy;
-    int8_t readout[ACCEL_REGS];
+    xlda_out_t readout;
     static i2c_status_t init_nack;
     if (current_state != state_xlda) {
         current_state = state_xlda;
@@ -168,25 +169,25 @@ static void state_xlda(void)
         return;
     }
 
-    if (init_nack || xlda_read(readout)) {
+    if (init_nack || xlda_read(&readout)) {
         lcd_setcolor(LCD_RED);
         lcd_puts_at("I2C_ERR", LCD_ROWTWO);
         return;
     }
 
-    dx = NORM_INPUT(readout[X_ACCEL_H], XLDA_X_MIN, XLDA_X_MAX);
-    if (fabsf(dx) < XLDA_THRSH * MAX_DELTA_POS)
+    dx = NORM_INT(readout.x, XLDA_X_MIN, XLDA_X_MAX);
+    if (fabsf(dx) < XLDA_THRSH * MAX_DELTA)
         dx = 0;
     else
         current_pos.x += dx;
 
-    dy = NORM_INPUT(readout[Y_ACCEL_H], XLDA_Y_MIN, XLDA_Y_MAX);
-    if (fabsf(dy) < XLDA_THRSH * MAX_DELTA_POS)
+    dy = NORM_INT(readout.y, XLDA_Y_MIN, XLDA_Y_MAX);
+    if (fabsf(dy) < XLDA_THRSH * MAX_DELTA)
         dy = 0;
     else
         current_pos.y += dy;
 
-    current_pos.z = readout[Z_ACCEL_H] >= 0; // Tip down with non-negative g
+    current_pos.z = readout.z >= 0; // Tip down with non-negative g
 
     if (!sv_move(&current_pos)) {
         current_pos.x -= dx;

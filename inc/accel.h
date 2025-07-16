@@ -15,14 +15,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "i2c.h"
 
-/* Public defines ------------------------------------------------------------*/
-#define ACCEL_REGS (Z_ACCEL_H + 1)
-
 /* Public typedefs/enums ------------------------------------------------------*/
-enum {X_ACCEL_L, X_ACCEL_H, Y_ACCEL_L, Y_ACCEL_H, Z_ACCEL_L, Z_ACCEL_H};
+typedef struct {int16_t x; int16_t y; int16_t z;} xlda_out_t; // SDCC's endianness same as lsm6ds33
 
 /* Public functions' prototypes -----------------------------------------------*/
 i2c_status_t xlda_init(uint8_t ctrl1);
-i2c_status_t xlda_read(int8_t pdata[static ACCEL_REGS]);
+i2c_status_t xlda_read(xlda_out_t *pdata);
 
 #endif // ACCEL_H

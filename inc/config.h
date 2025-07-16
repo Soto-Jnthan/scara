@@ -20,7 +20,7 @@
 /* main config definitions: */
 #define PLLCON_INIT_VAL    0x00     // Must be assigned to PLLCON at application entry
 #define INITIAL_POSITION   {10, 10}
-#define MAX_DELTA_POS      0.5      // SCARA arm max movement step in centimeters (absolute value)
+#define MAX_DELTA          0.5      // SCARA arm max movement step in centimeters (absolute value)
 #define AUTO_MODE_DELAY_MS 1000     // Delay between each auto mode step in milliseconds
 #define DBNC_DELAY_MS      5        // Button debounce delay in milliseconds
 #define BTNA_CHK           BTN1_CHK
@@ -56,13 +56,13 @@ runtime transformations still needed for JSTK/XLDA modes */
 
 /* accel config definitions: */
 #define LSM6DS_A0_VAL 1
-#define CTRL1_ON_VAL  0x50 // 208 Hz (normal mode)
+#define CTRL1_ON_VAL  0x50   // 208 Hz (normal mode)
 #define CTRL1_OFF_VAL 0
-#define XLDA_X_MAX    127  // [-128 <= XLDA_X_MIN <= XLDA_X_MAX <= 127]
-#define XLDA_X_MIN    -128
-#define XLDA_Y_MAX    127  // [-128 <= XLDA_Y_MIN <= XLDA_Y_MAX <= 127]
-#define XLDA_Y_MIN    -128
-#define XLDA_THRSH    0.1  // Accelerometer input threshold (between 0 and 1.0)
+#define XLDA_X_MAX    32767  // [-32768 <= XLDA_X_MIN <= XLDA_X_MAX <= 32767] 
+#define XLDA_X_MIN    -32768
+#define XLDA_Y_MAX    32767  // [-32768 <= XLDA_Y_MIN <= XLDA_Y_MAX <= 32767]
+#define XLDA_Y_MIN    -32768 
+#define XLDA_THRSH    0.1    // Accelerometer input threshold (between 0 and 1.0)
 
 /* lcd config definitions: */
 #define LCD_COLUMNS_PER_ROW 12
