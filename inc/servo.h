@@ -33,12 +33,12 @@
 
 /* Public typedefs/enums ------------------------------------------------------*/
 typedef enum {BASE, MID, TIP} servo_t;
-struct point {float x; float y; _Bool z;};
+typedef struct {float x; float y; _Bool z;} point_t;
 
 /* Public functions' prototypes -----------------------------------------------*/
 void sv_init(void);
 bool sv_setcnt(servo_t sv, uint16_t cnt);
-bool sv_move(const struct point *p);
+bool sv_move(const point_t *p);
 void sv_isr(void) __interrupt(TF2_VECTOR) __naked;
 
 /** ASSUMED ARM CONFIGURATION FOR ANGLE CALCULATIONS **/

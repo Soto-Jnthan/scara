@@ -63,7 +63,7 @@ enum lcd_command {
 // *:   Don't Care
 };
 
-enum lcd_color {
+typedef enum {
     LCD_NOLEDS,
     LCD_RED = LCD_RED_LED_MASK, // RGB
     LCD_GREEN = LCD_GREEN_LED_MASK,
@@ -72,11 +72,11 @@ enum lcd_color {
     LCD_MAGENTA = LCD_RED | LCD_BLUE,
     LCD_YELLOW = LCD_RED | LCD_GREEN,
     LCD_WHITE = LCD_RED | LCD_GREEN | LCD_BLUE
-};
+} lcd_color_t;
 
 /* Public functions' prototypes ----------------------------------------------*/
 void lcd_init(void);
-void lcd_cmd(uint8_t cmd);
+void lcd_cmd(uint8_t cmd); // Not enum to allow custom CG/DDRAM addresses
 void lcd_putchar(char c);
 void lcd_puts(const char *str);
 
@@ -84,10 +84,10 @@ void lcd_puts(const char *str);
 
 /**
  * @brief  Turn on/off the LEDs of the LCD
- * @param  c Specify LEDs to be turned on via enum LCD_Color
+ * @param  c Specify LEDs to be turned on via lcd_color_t enum
  * @retval None
  */
-inline void lcd_setcolor(enum lcd_color c)
+inline void lcd_setcolor(lcd_color_t c)
 {
     PORT_LCD_LED &= ~c;
     PORT_LCD_LED |= c ^ LCD_WHITE;

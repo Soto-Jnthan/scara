@@ -33,7 +33,7 @@ static void state_auto(void);
 
 /* Private variables ----------------------------------------------------------*/
 static void (*current_state)(void) = state_init;
-static struct point current_pos = INITIAL_POSITION;
+static point_t current_pos = INITIAL_POSITION;
 
 /**
  * @brief  The application entry point
@@ -202,7 +202,7 @@ static void state_xlda(void)
 static void state_auto(void)
 {
     static uint8_t p_cnt;
-    static const struct point auto_arr[] = AUTO_MODE_POINTS;
+    static const point_t auto_arr[] = AUTO_MODE_POINTS;
     if (current_state != state_auto) {
         current_state = state_auto;
         lcd_setcolor(LCD_MAGENTA);

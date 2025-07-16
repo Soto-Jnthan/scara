@@ -54,12 +54,12 @@ bool sv_setcnt(servo_t sv, uint16_t cnt)
 
 /**
  * @brief Position the arm tip over a point on the cartesian plane
- * @param p Pointer to point struct containing the x,y,z coordinates
+ * @param p Pointer to point_t containing the x,y,z coordinates
  * @note The point must be in the range of the two-links inverse kinematics equations
  *       of the arm configuration illustrated in the servo.h file
  * @retval True if all links were moved, false otherwise
  */
-bool sv_move(const struct point *p)
+bool sv_move(const point_t *p)
 {
     float c, s, a; // cos, sin, alpha
     c = (SQR(p->x) + SQR(p->y) - SQR(SV_L1) - SQR(SV_L2)) / (2 * SV_L1 * SV_L2);
