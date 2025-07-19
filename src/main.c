@@ -18,8 +18,8 @@
 
 /* Private macros -------------------------------------------------------------*/
 #define DBNC_BTN(BTN_CHK) do {delay_ms(DBNC_DELAY_MS); while (BTN_CHK);} while (0)
-#define ISUB(A, B) ((A) + (int16_t)~(B) + 1) // Avoid -INT_MIN integer promotion
-#define NORM_INT(A, MIN, MAX) (2.0 * MAX_DELTA / ISUB(MAX, MIN) * ISUB(A, MIN) - MAX_DELTA)
+#define ISUB(N, A, B) ((uint ## N ## _t)((A) - (B))) // Ensure correct casting. A ≥ B required 
+#define NORM_INT(N, A, MIN, MAX) (2.0 * MAX_DELTA / ISUB(N, MAX, MIN) * ISUB(N, A, MIN) - MAX_DELTA)
 
 /* Public functions' prototypes -----------------------------------------------*/
 void delay_ms(uint16_t ms_cnt);
@@ -121,13 +121,13 @@ static void state_jstk(void)
         return;
     }
 
-    dx = NORM_INT(readout.x, JSTK_X_MIN, JSTK_X_MAX);
+    dx = NORM_INT(8, readout.x, JSTK_X_MIN, JSTK_X_MAX);
     if (fabsf(dx) < JSTK_THRSH * MAX_DELTA)
         dx = 0;
     else
         current_pos.x += dx;
 
-    dy = NORM_INT(readout.y, JSTK_Y_MIN, JSTK_Y_MAX);
+    dy = NORM_INT(8, readout.y, JSTK_Y_MIN, JSTK_Y_MAX);
     if (fabsf(dy) < JSTK_THRSH * MAX_DELTA)
         dy = 0;
     else
@@ -175,13 +175,13 @@ static void state_xlda(void)
         return;
     }
 
-    dx = NORM_INT(readout.x, XLDA_X_MIN, XLDA_X_MAX);
+    dx = NORM_INT(16, readout.x, XLDA_X_MIN, XLDA_X_MAX);
     if (fabsf(dx) < XLDA_THRSH * MAX_DELTA)
         dx = 0;
     else
         current_pos.x += dx;
 
-    dy = NORM_INT(readout.y, XLDA_Y_MIN, XLDA_Y_MAX);
+    dy = NORM_INT(16, readout.y, XLDA_Y_MIN, XLDA_Y_MAX);
     if (fabsf(dy) < XLDA_THRSH * MAX_DELTA)
         dy = 0;
     else
