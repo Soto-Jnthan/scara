@@ -72,7 +72,7 @@
             "peep-asm": true
           },
           "c/cpp-compiler": {
-            "language-c": "sdcc2y"
+            "language-c": "sdcc2x"
           },
           "asm-compiler": {},
           "linker": {

@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    lab_board.h
  * @author  J.Soto
- * @version V1.3.0
- * @date    July 11th, 2025
+ * @version V1.3.1
+ * @date    July 19th, 2025
  * @brief   This file contains the definitions of the MCU development board at use
  ******************************************************************************
  */

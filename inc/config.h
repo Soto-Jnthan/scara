@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    config.h
  * @author  J.Soto
- * @version V1.3.0
- * @date    July 11th, 2025
+ * @version V1.3.1
+ * @date    July 19th, 2025
  * @brief   This file contains the config definitions for the SCARA project
  ******************************************************************************
  */

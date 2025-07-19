@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    utils.h
  * @author  J.Soto
- * @version V1.3.0
- * @date    July 11th, 2025
+ * @version V1.3.1
+ * @date    July 19th, 2025
  * @brief   This file contains the common definitions of the application
  ******************************************************************************
  */
@@ -27,9 +27,9 @@
 #define OVHEAD_CONST   16.023 // Loop overhead constant for volatile uint16_t (measured debugging)
 
 /* Public macros -------------------------------------------------------------*/
-#define LOWBYTE(A)   ((uint8_t)(A))                    // Only for r-values
-#define HIGHBYTE(A)  ((uint8_t)(((uint16_t)(A)) >> 8)) // Only for r-values
-#define ARR_SIZE(A)  (sizeof(A) / sizeof(*A))          // Size of array (only within scope of initialization)
+#define LOWBYTE(A)  ((uint8_t)(A))                  // Only for r-values
+#define HIGHBYTE(A) ((uint8_t)((uint16_t)(A) >> 8)) // Only for r-values
+#define ARR_SIZE(A) (sizeof(A) / sizeof(*(A)))      // Size of array (only within scope of initialization)
 
 #define US_TO_MC(A) ((uint16_t)((A) * CORE_CLK_FREQ / 12 + 0.5)) // uS to machine cycles
 #define DELAY_US(A) do {for (volatile uint16_t i = US_TO_MC((A) / OVHEAD_CONST); i; i--);} while (0)

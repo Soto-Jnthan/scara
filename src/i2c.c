@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    i2c.c
  * @author  J.Soto
- * @version V1.3.0
- * @date    July 11th, 2025
+ * @version V1.3.1
+ * @date    July 19th, 2025
  * @brief   Inter-Integrated Circuit (I2C) Driver Software
  ******************************************************************************
  */
@@ -15,16 +15,16 @@
 #define TX_MODE    1
 #define RX_MODE    0
 #define BYTE_BIT   8
-#define SPICON_OFF 0x00
 #define I2CCON_ON  0xA8 // Set I2CM and enter IDLE state
+#define SPICON_OFF 0x00
 
 /* Private macros -------------------------------------------------------------*/
 #define I2C_WR(ADDR) ((ADDR) << 1)
 #define I2C_RD(ADDR) (((ADDR) << 1) | 1U)
 
 /* Private inline functions' definitions ---------------------------------------*/
-inline void i2c_delay(void) {NOP(); NOP(); NOP();} // Depends on I2C mode and core frequency
-inline void i2c_pulse(void) {MCO = 1; i2c_delay(); MCO = 0;}
+inline void i2c_delay(void) { NOP(); NOP(); NOP(); } // Depends on I2C mode and core frequency
+inline void i2c_pulse(void) { MCO = 1; i2c_delay(); MCO = 0; }
 
 /* Private functions' prototypes -----------------------------------------------*/
 static void i2c_start(void);

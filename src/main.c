@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    main.c
  * @author  J.Soto
- * @version V1.3.0
- * @date    July 11th, 2025
+ * @version V1.3.1
+ * @date    July 19th, 2025
  * @brief   SCARA Robot Controller Application
  ******************************************************************************
  */
@@ -18,7 +18,7 @@
 
 /* Private macros -------------------------------------------------------------*/
 #define DBNC_BTN(BTN_CHK) do {delay_ms(DBNC_DELAY_MS); while (BTN_CHK);} while (0)
-#define ISUB(N, A, B) ((uint ## N ## _t)((A) - (B))) // Ensure correct casting. A ≥ B required 
+#define ISUB(N, A, B) ((uint##N##_t)((A) - (B))) // Ensure correct casting. A ≥ B required
 #define NORM_INT(N, A, MIN, MAX) (2.0 * MAX_DELTA / ISUB(N, MAX, MIN) * ISUB(N, A, MIN) - MAX_DELTA)
 
 /* Public functions' prototypes -----------------------------------------------*/

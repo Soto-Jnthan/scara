@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    joystick.c
  * @author  J.Soto
- * @version V1.3.0
- * @date    July 11th, 2025
+ * @version V1.3.1
+ * @date    July 19th, 2025
  * @brief   Joystick Driver Software
  ******************************************************************************
  */
@@ -25,9 +25,9 @@ void jstk_init(void)
 
 /**
  * @brief Read the values of the two axes of the joystick
- * @note ADC0 and ADC1 assumed to be connected to x-axis and y-axis respectively
  * @param pdata Pointer to jstk_out_t used for data reception
- * @retval ADC_OK if both ADC readings were successfuly, ADC_ERR otherwise
+ * @note ADC0 and ADC1 assumed to be connected to x-axis and y-axis respectively
+ * @retval ADC_OK if both ADC readings were successful, ADC_ERR otherwise
  */
 adc_status_t jstk_read(jstk_out_t *pdata)
 {

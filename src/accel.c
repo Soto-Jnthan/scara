@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    accel.c
  * @author  J.Soto
- * @version V1.3.0
- * @date    July 11th, 2025
+ * @version V1.3.1
+ * @date    July 19th, 2025
  * @brief   Accelerometer Driver Software
  ******************************************************************************
  */
@@ -20,7 +20,7 @@
 i2c_status_t xlda_init(const xlda_ctrl_t *ctrl)
 {
     i2c_init();
-    return i2c_memwrite(LSM6DS_I2CADDR, CTRL1_XL, (uint8_t*)ctrl, sizeof(*ctrl));
+    return i2c_memwrite(LSM6DS_I2CADDR, CTRL1_XL, (uint8_t *)ctrl, sizeof(*ctrl));
 }
 
 /**
