@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    lcd.c
  * @author  J.Soto
- * @version V1.3.0
- * @date    July 11th, 2025
+ * @version V1.3.1
+ * @date    July 19th, 2025
  * @brief   Liquid Crystal Display (LCD) Driver Software
  ******************************************************************************
  */
@@ -18,10 +18,10 @@
 #define LCD_POWER_ON_DELAY_MS 40 // 5V:15mS 3.3V:40mS
 #define LCD_FUNC_SET_DELAY_MS 5  // 4.1mS
 #define LCD_MAX_BUSY_DELAY_MS 2  // 1.52mS
-#define LCD_REWRITE_DELAY_MS  1  // 100uS
+#define LCD_REWRITE_DELAY_MS  1   // 100uS
 
 /* Private inline functions' definitions ---------------------------------------*/
-inline uint8_t swap_nibs(uint8_t a) {return a >> 4 | a << 4;} // Compiler uses SWAP opcode
+inline uint8_t swap_nibs(uint8_t a) { return a >> 4 | a << 4; } // Compiler uses SWAP opcode
 
 /* Imported functions' prototypes ---------------------------------------------*/
 extern void delay_ms(uint16_t ms_cnt);
