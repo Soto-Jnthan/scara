@@ -97,7 +97,8 @@ static void state_idle(void)
  */
 static void state_jstk(void)
 {
-    float dx, dy;
+    float delta;
+    point_t old_pos;
     jstk_out_t readout;
     if (current_state != state_jstk) {
         current_state = state_jstk;
@@ -121,27 +122,23 @@ static void state_jstk(void)
         return;
     }
 
-    dx = NORM_INT(8, readout.x, JSTK_X_MIN, JSTK_X_MAX);
-    if (fabsf(dx) < JSTK_THRSH * MAX_DELTA)
-        dx = 0;
-    else
-        current_pos.x += dx;
+    old_pos = current_pos;
 
-    dy = NORM_INT(8, readout.y, JSTK_Y_MIN, JSTK_Y_MAX);
-    if (fabsf(dy) < JSTK_THRSH * MAX_DELTA)
-        dy = 0;
-    else
-        current_pos.y += dy;
+    delta = NORM_INT(8, readout.x, JSTK_X_MIN, JSTK_X_MAX);
+    if (fabsf(delta) >= JSTK_THRSH * MAX_DELTA)
+        current_pos.x += delta;
+
+    delta = NORM_INT(8, readout.y, JSTK_Y_MIN, JSTK_Y_MAX);
+    if (fabsf(delta) >= JSTK_THRSH * MAX_DELTA)
+        current_pos.y += delta;
 
     if (JSTK_TIP_BTN_CHK) {
         DBNC_BTN(JSTK_TIP_BTN_CHK);
         current_pos.z = !current_pos.z;
     }
 
-    if (!sv_move(&current_pos)) {
-        current_pos.x -= dx;
-        current_pos.y -= dy;
-    }
+    if (!sv_move(&current_pos))
+        current_pos = old_pos;
 }
 
 /**
@@ -150,10 +147,12 @@ static void state_jstk(void)
  */
 static void state_xlda(void)
 {
-    float dx, dy;
+    float delta;
+    point_t old_pos;
     xlda_out_t readout;
     static i2c_status_t init_nack;
-    static const xlda_ctrl_t xl_on = XLDA_ON_VALS, xl_off = XLDA_OFF_VALS;
+    static const xlda_ctrl_t xl_on = XLDA_ON_VALS;
+    static const xlda_ctrl_t xl_off = XLDA_OFF_VALS;
     if (current_state != state_xlda) {
         current_state = state_xlda;
         lcd_setcolor(LCD_CYAN);
@@ -176,24 +175,20 @@ static void state_xlda(void)
         return;
     }
 
-    dx = NORM_INT(16, readout.x, XLDA_X_MIN, XLDA_X_MAX);
-    if (fabsf(dx) < XLDA_THRSH * MAX_DELTA)
-        dx = 0;
-    else
-        current_pos.x += dx;
+    old_pos = current_pos;
 
-    dy = NORM_INT(16, readout.y, XLDA_Y_MIN, XLDA_Y_MAX);
-    if (fabsf(dy) < XLDA_THRSH * MAX_DELTA)
-        dy = 0;
-    else
-        current_pos.y += dy;
+    delta = NORM_INT(16, readout.x, XLDA_X_MIN, XLDA_X_MAX);
+    if (fabsf(delta) >= XLDA_THRSH * MAX_DELTA)
+        current_pos.x += delta;
+
+    delta = NORM_INT(16, readout.y, XLDA_Y_MIN, XLDA_Y_MAX);
+    if (fabsf(delta) >= XLDA_THRSH * MAX_DELTA)
+        current_pos.y += delta;
 
     current_pos.z = readout.z >= 0; // Tip down with non-negative g
 
-    if (!sv_move(&current_pos)) {
-        current_pos.x -= dx;
-        current_pos.y -= dy;
-    }
+    if (!sv_move(&current_pos))
+        current_pos = old_pos;
 }
 
 /**
