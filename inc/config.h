@@ -56,8 +56,8 @@ runtime transformations still needed for JSTK/XLDA modes */
 
 /* accel config definitions: */
 #define LSM6DS_A0_VAL 1
-#define CTRL1_ON_VAL  0x50   // 208 Hz (normal mode)
-#define CTRL1_OFF_VAL 0
+#define XLDA_ON_VALS  {0x50} // {CTRL1_XL} 208 Hz (normal mode)
+#define XLDA_OFF_VALS {0x00}
 #define XLDA_X_MAX    32767  // [-32768 ≤ XLDA_X_MIN ≤ XLDA_X_MAX ≤ 32767] 
 #define XLDA_X_MIN    -32768
 #define XLDA_Y_MAX    32767  // [-32768 ≤ XLDA_Y_MIN ≤ XLDA_Y_MAX ≤ 32767]

@@ -14,13 +14,13 @@
 
 /**
  * @brief Initialize the accelerometer of the LSM6DS33
- * @param ctrl1 Value to which CTRL1_XL will be overwritten
+ * @param ctrl Pointer to xlda_ctrl_t containing CTRL_X values
  * @retval I2C_ACK if connection established, I2C_NACK otherwise
  */
-i2c_status_t xlda_init(uint8_t ctrl1)
+i2c_status_t xlda_init(const xlda_ctrl_t *ctrl)
 {
     i2c_init();
-    return i2c_memwrite(LSM6DS_I2CADDR, CTRL1_XL, &ctrl1, sizeof(ctrl1));
+    return i2c_memwrite(LSM6DS_I2CADDR, CTRL1_XL, (uint8_t*)ctrl, sizeof(*ctrl));
 }
 
 /**

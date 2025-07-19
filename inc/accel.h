@@ -17,9 +17,10 @@
 
 /* Public typedefs/enums ------------------------------------------------------*/
 typedef struct {int16_t x, y, z;} xlda_out_t; // SDCC's endianness same as lsm6ds33
+typedef struct {int8_t xl;} xlda_ctrl_t;      // Add contiguous CTRL registers as needed
 
 /* Public functions' prototypes -----------------------------------------------*/
-i2c_status_t xlda_init(uint8_t ctrl1);
+i2c_status_t xlda_init(const xlda_ctrl_t *ctrl);
 i2c_status_t xlda_read(xlda_out_t *pdata);
 
 #endif // ACCEL_H

@@ -153,17 +153,18 @@ static void state_xlda(void)
     float dx, dy;
     xlda_out_t readout;
     static i2c_status_t init_nack;
+    static const xlda_ctrl_t xl_on = XLDA_ON_VALS, xl_off = XLDA_OFF_VALS;
     if (current_state != state_xlda) {
         current_state = state_xlda;
         lcd_setcolor(LCD_CYAN);
         lcd_puts_at("XLDA Mode", LCD_CLEAR);
         lcd_puts_at("BUT.C:Exit", LCD_ROWFOUR);
-        init_nack = xlda_init(CTRL1_ON_VAL);
+        init_nack = xlda_init(&xl_on);
         return;
     }
 
     if (BTNC_CHK) {
-        xlda_init(CTRL1_OFF_VAL);
+        xlda_init(&xl_off);
         state_idle();
         DBNC_BTN(BTNC_CHK);
         return;
