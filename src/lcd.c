@@ -13,6 +13,7 @@
 
 /* Private defines -----------------------------------------------------------*/
 #define HIGH_NIB_MASK 0xF0U
+#define LOG10_256     2.40823996531
 
 #define LCD_POWER_ON_DELAY_MS 40 // 5V:15mS 3.3V:40mS
 #define LCD_FUNC_SET_DELAY_MS 5  // 4.1mS
@@ -107,3 +108,50 @@ void lcd_puts(const char *str)
     while (*str != '\0')
         lcd_putchar(*str++);
 }
+
+#if defined(ENABLE_PUTI) || defined(ENABLE_PUTF)
+/**
+ * @brief  Send an int as an array of characters to the LCD
+ * @param  val Signed integer to be sent to the LCD
+ * @note   Assumed that the LCD has enough columns for all characters
+ * @retval None
+ */
+void lcd_puti(int32_t val)
+{
+    int8_t i = 0, sign = 1;
+    char s[(int)(LOG10_256 * sizeof(val)) + 1]; // max_digits
+    if (val < 0) {
+        lcd_putchar('-');
+        sign = -1;
+    }
+    do {
+        s[i++] = sign * (signed char)(val % 10) + '0';
+    } while (val /= 10);
+    do {
+        lcd_putchar(s[--i]);
+    } while (i);
+}
+#endif
+
+#ifdef ENABLE_PUTF
+/**
+ * @brief  Send a float as an array of characters to the LCD
+ * @param  val Float to be sent to the LCD
+ * @note   Value must be within int32_t's range plus 2 decimal places.
+ *         Assumed that the LCD has enough columns for all characters
+ * @retval None
+ */
+void lcd_putf(float val)
+{
+    uint32_t temp;
+    if (val < 0.0f) {
+        lcd_putchar('-');
+        val = -val;
+    }
+    lcd_puti(temp = val);
+    lcd_putchar('.');
+    temp = 100 * (val - temp) + 0.5f;
+    lcd_putchar((char)((temp / 10) % 10) + '0');
+    lcd_putchar((char)(temp % 10) + '0');
+}
+#endif

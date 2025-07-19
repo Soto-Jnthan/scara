@@ -15,6 +15,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "utils.h"
 
+/* Private defines -----------------------------------------------------------*/
+//#define ENABLE_PUTI
+//#define ENABLE_PUTF
+
 /* Public typedefs/enums -----------------------------------------------------*/
 enum lcd_command {
 //                                      D7  D6  D5  D4  D3   D2  D1   D0
@@ -76,9 +80,15 @@ typedef enum {
 
 /* Public functions' prototypes ----------------------------------------------*/
 void lcd_init(void);
-void lcd_cmd(uint8_t cmd); // Not enum to allow custom CG/DDRAM addresses
+void lcd_cmd(uint8_t cmd); // No enum type to avoid CG/DDRAM address warnings
 void lcd_putchar(char c);
 void lcd_puts(const char *str);
+#if defined(ENABLE_PUTI) || defined(ENABLE_PUTF)
+void lcd_puti(int32_t val);
+#endif
+#ifdef ENABLE_PUTF
+void lcd_putf(float val);
+#endif
 
 /* Public inline functions' definitions --------------------------------------*/
 
