@@ -16,7 +16,7 @@
 #include "utils.h"
 
 /* Public defines ------------------------------------------------------------*/
-//#define ENABLE_PUTU
+#define ENABLE_PUTU
 //#define ENABLE_PUTI
 //#define ENABLE_PUTF
 

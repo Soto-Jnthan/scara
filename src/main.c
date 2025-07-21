@@ -86,8 +86,8 @@ static void state_idle(void)
     }
 
     if (BTNC_CHK) {
-        DBNC_BTN(BTNC_CHK);
         state_auto();
+        DBNC_BTN(BTNC_CHK);
         return;
     }
 }
@@ -192,14 +192,13 @@ static void state_xlda(void)
  */
 static void state_auto(void)
 {
-    static uint8_t p_cnt;
+    static uint16_t p_cnt;
     static const point_t auto_arr[] = AUTO_MODE_POINTS;
     if (current_state != state_auto) {
         current_state = state_auto;
         lcd_setcolor(LCD_MAGENTA);
         lcd_puts_at("Auto Mode", LCD_CLEAR);
         lcd_puts_at("BUT.C:Exit", LCD_ROWFOUR);
-        lcd_puts_at("In Progress", LCD_ROWTHREE);
         lcd_cmd(LCD_DCBON);
         return;
     }
@@ -212,7 +211,13 @@ static void state_auto(void)
         return;
     }
 
-    if (!sv_move(&auto_arr[p_cnt++])) {
+    if (sv_move(&auto_arr[p_cnt++])) {
+        lcd_cmd(LCD_ROWTHREE);
+        lcd_putu(p_cnt);
+        lcd_putchar('/');
+        lcd_putu(ARR_SIZE(auto_arr));
+    } else {
+        /* Skipped points not counted */
         lcd_setcolor(LCD_RED);
         lcd_puts_at("BAD_COORD.", LCD_ROWTWO);
     }
