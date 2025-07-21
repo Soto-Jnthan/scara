@@ -34,6 +34,7 @@
 #define US_TO_MC(A) ((uint16_t)((A) * CORE_CLK_FREQ / 12 + 0.5)) // uS to machine cycles
 #define DELAY_US(A) do {for (volatile uint16_t i = US_TO_MC((A) / OVHEAD_CONST); i; i--);} while (0)
 
+#define ROUND(A) ((int64_t)((A) + ((A) >= 0 ? 0.5 : -0.5))) // For compile-time operations with unknown sign
 #define LERP(A,B,C,D,E) (((E)-(D))*((A)-(B))/((C)-(B))+(D)) // Linear interpolation of A from interval [B-C] to [D-E]
 
 #endif // UTILS_H

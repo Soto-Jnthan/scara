@@ -9,7 +9,6 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
-#include <math.h>
 #include "utils.h"
 #include "lcd.h"
 #include "joystick.h"
@@ -20,6 +19,8 @@
 #define DBNC_BTN(BTN_CHK) do {delay_ms(DBNC_DELAY_MS); while (BTN_CHK);} while (0)
 #define ISUB(N, A, B) ((uint##N##_t)((A) - (B))) // Ensure correct casting. A ≥ B required
 #define NORM_INT(N, A, MIN, MAX) (2.0 * MAX_DELTA / ISUB(N, MAX, MIN) * ISUB(N, A, MIN) - MAX_DELTA)
+#define INT_THRSH(T, MIN, MAX) ROUND(ISUB(64, MAX, MIN) * ((T) + 1) / 2 + (MIN))
+#define OVER_THRSH(A, MIN, MAX, T) ((A) <= INT_THRSH(-T, MIN, MAX) || (A) >= INT_THRSH(T, MIN, MAX))
 
 /* Public functions' prototypes -----------------------------------------------*/
 void delay_ms(uint16_t ms_cnt);
@@ -97,9 +98,8 @@ static void state_idle(void)
  */
 static void state_jstk(void)
 {
-    float delta;
-    point_t old_pos;
     jstk_out_t readout;
+    __idata point_t old_pos;
     if (current_state != state_jstk) {
         current_state = state_jstk;
         lcd_setcolor(LCD_CYAN);
@@ -124,13 +124,11 @@ static void state_jstk(void)
 
     old_pos = current_pos;
 
-    delta = NORM_INT(8, readout.x, JSTK_X_MIN, JSTK_X_MAX);
-    if (fabsf(delta) >= JSTK_THRSH * MAX_DELTA)
-        current_pos.x += delta;
+    if (OVER_THRSH(readout.x, JSTK_X_MIN, JSTK_X_MAX, JSTK_THRSH))
+        current_pos.x += NORM_INT(8, readout.x, JSTK_X_MIN, JSTK_X_MAX);
 
-    delta = NORM_INT(8, readout.y, JSTK_Y_MIN, JSTK_Y_MAX);
-    if (fabsf(delta) >= JSTK_THRSH * MAX_DELTA)
-        current_pos.y += delta;
+    if (OVER_THRSH(readout.y, JSTK_Y_MIN, JSTK_Y_MAX, JSTK_THRSH))
+        current_pos.y += NORM_INT(8, readout.y, JSTK_Y_MIN, JSTK_Y_MAX);
 
     if (JSTK_TIP_BTN_CHK) {
         DBNC_BTN(JSTK_TIP_BTN_CHK);
@@ -147,9 +145,8 @@ static void state_jstk(void)
  */
 static void state_xlda(void)
 {
-    float delta;
-    point_t old_pos;
     xlda_out_t readout;
+    __idata point_t old_pos;
     static i2c_status_t init_nack;
     static const xlda_ctrl_t xl_on = XLDA_ON_VALS;
     static const xlda_ctrl_t xl_off = XLDA_OFF_VALS;
@@ -177,13 +174,11 @@ static void state_xlda(void)
 
     old_pos = current_pos;
 
-    delta = NORM_INT(16, readout.x, XLDA_X_MIN, XLDA_X_MAX);
-    if (fabsf(delta) >= XLDA_THRSH * MAX_DELTA)
-        current_pos.x += delta;
+    if (OVER_THRSH(readout.x, XLDA_X_MIN, XLDA_X_MAX, XLDA_THRSH))
+        current_pos.x += NORM_INT(16, readout.x, XLDA_X_MIN, XLDA_X_MAX);
 
-    delta = NORM_INT(16, readout.y, XLDA_Y_MIN, XLDA_Y_MAX);
-    if (fabsf(delta) >= XLDA_THRSH * MAX_DELTA)
-        current_pos.y += delta;
+    if (OVER_THRSH(readout.y, XLDA_Y_MIN, XLDA_Y_MAX, XLDA_THRSH))
+        current_pos.y += NORM_INT(16, readout.y, XLDA_Y_MIN, XLDA_Y_MAX);
 
     current_pos.z = readout.z >= 0; // Tip down with non-negative g
 
