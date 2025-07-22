@@ -18,6 +18,7 @@
 /* Public defines ------------------------------------------------------------*/
 
 /* main config definitions: */
+#define CORE_CLK_FREQ      12       // MHz
 #define PLLCON_INIT_VAL    0x00     // Must be assigned to PLLCON at application entry
 #define INITIAL_POSITION   {10, 10}
 #define MAX_DELTA          0.5      // SCARA arm max movement step in centimeters (absolute value)
@@ -39,19 +40,16 @@
 runtime transformations still needed for JSTK/XLDA modes */
 
 /* joystick config definitions: */
+#define ADS1015_ADDR_VAL   0
 #define JSTK_FRONT_BTN_CHK BTN2_CHK
 #define JSTK_BACK_BTN_CHK  BTN3_CHK
 #define JSTK_RIGHT_BTN_CHK BTN5_CHK
 #define JSTK_LEFT_BTN_CHK  BTN4_CHK
 #define JSTK_TIP_BTN_CHK   JSTK_BACK_BTN_CHK
-#define JSTK_ADC0CON_VAL   0x4F // ADC0 set to full scale unipolar mode from AIN1 to AIN2 with XREF
-#define JSTK_ADC1CON_VAL   0x58 // ADC0 set to unipolar mode from AIN4 to GND with XREF
-#define JSTK_SF_VAL        0x0D // Max ADC Output Update Rate
-#define JSTK_ADCMODE_VAL   0x33 // ADC0 and ADC1 powered on in continuous conversion mode
-#define JSTK_X_MAX         200  // [0 ≤ JSTK_X_MIN ≤ JSTK_X_MAX ≤ 255]
-#define JSTK_X_MIN         55
-#define JSTK_Y_MAX         200  // [0 ≤ JSTK_Y_MIN ≤ JSTK_Y_MAX ≤ 255]
-#define JSTK_Y_MIN         55
+#define JSTK_X_MAX         127  // [-128 ≤ JSTK_X_MIN ≤ JSTK_X_MAX ≤ 127]
+#define JSTK_X_MIN         -128
+#define JSTK_Y_MAX         127  // [-128 ≤ JSTK_Y_MIN ≤ JSTK_Y_MAX ≤ 127]
+#define JSTK_Y_MIN         -128
 #define JSTK_THRSH         0.1  // Joystick input threshold (between 0 and 1.0)
 
 /* accel config definitions: */
@@ -65,7 +63,7 @@ runtime transformations still needed for JSTK/XLDA modes */
 #define XLDA_THRSH    0.1    // Accelerometer input threshold (between 0 and 1.0)
 
 /* lcd config definitions: */
-#define LCD_COLUMNS_PER_ROW 12
+#define LCD_COLUMNS_PER_ROW 16
 
 /* servo config definitions: */
 #define SV_L1            8.0    // Arm length of 'base' servo (in centimeters)

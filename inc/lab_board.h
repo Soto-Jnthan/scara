@@ -13,7 +13,7 @@
 #define LAB_BOARD_H
 
 /* Includes ------------------------------------------------------------------*/
-#include <ADuC834.h>
+#include <at89x52.h>
 
 /* Public defines ------------------------------------------------------------*/
 #define BTN1_CHK           (!P1_1)
@@ -21,6 +21,9 @@
 #define BTN3_CHK           (!P3_5)
 #define BTN4_CHK           (!P3_2)
 #define BTN5_CHK           (!P3_3)
+
+#define SDA                P1_2
+#define SCL                P1_0
 
 /* SV lines are inverted */
 #define PORT_SV            P0

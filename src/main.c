@@ -42,7 +42,6 @@ static point_t current_pos = INITIAL_POSITION;
  */
 void main(void)
 {
-    PLLCON = PLLCON_INIT_VAL; // Configure core clock
     while (1)
         current_state();
 }
@@ -110,15 +109,14 @@ static void state_jstk(void)
     }
 
     if (BTNC_CHK) {
-        jstk_disable();
         state_idle();
         DBNC_BTN(BTNC_CHK);
         return;
     }
 
-    if (jstk_read(&readout) != ADC_OK) {
+    if (jstk_read(&readout) != I2C_ACK) {
         lcd_setcolor(LCD_RED);
-        lcd_puts_at("ADC_ERR", LCD_ROWTWO);
+        lcd_puts_at("I2C_ERR", LCD_ROWTWO);
         return;
     }
 

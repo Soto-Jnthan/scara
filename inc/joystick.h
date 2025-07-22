@@ -13,27 +13,13 @@
 #define JOYSTICK_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "utils.h"
+#include "i2c.h"
 
 /* Public typedefs/enums -----------------------------------------------------*/
-typedef struct {uint8_t x, y;} jstk_out_t;
-
-typedef bool adc_status_t;
-enum {ADC_OK, ADC_ERR};
+typedef struct {int8_t x, y;} jstk_out_t;
 
 /* Public functions' prototypes ----------------------------------------------*/
 void jstk_init(void);
-adc_status_t jstk_read(jstk_out_t *pdata);
-
-/* Public inline functions' definitions --------------------------------------*/
-
-/**
- * @brief Turn off the ADCs connected to the joystick
- * @retval None
- */
-inline void jstk_disable(void)
-{
-    ADCMODE &= ~(ADC0EN | ADC1EN);
-}
+i2c_status_t jstk_read(jstk_out_t *pdata);
 
 #endif // JOYSTICK_H

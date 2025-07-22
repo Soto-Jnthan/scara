@@ -12,19 +12,14 @@
 #include "i2c.h"
 
 /* Private defines -----------------------------------------------------------*/
-#define TX_MODE    1
-#define RX_MODE    0
-#define BYTE_BIT   8
-#define I2CCON_ON  0xA8 // Set I2CM and enter IDLE state
-#define SPICON_OFF 0x00
+#define BYTE_BIT 8
 
 /* Private macros -------------------------------------------------------------*/
 #define I2C_WR(ADDR) ((ADDR) << 1)
 #define I2C_RD(ADDR) (((ADDR) << 1) | 1U)
 
 /* Private inline functions' definitions ---------------------------------------*/
-inline void i2c_delay(void) { NOP(); NOP(); NOP(); } // Depends on I2C mode and core frequency
-inline void i2c_pulse(void) { MCO = 1; i2c_delay(); MCO = 0; }
+inline void i2c_delay(void) {NOP(); NOP(); NOP(); NOP();} // Depends on I2C mode and core frequency
 
 /* Private functions' prototypes -----------------------------------------------*/
 static void i2c_start(void);
@@ -39,8 +34,8 @@ static uint8_t i2c_receivebyte(i2c_status_t reply_bit);
  */
 void i2c_init(void)
 {
-    SPICON = SPICON_OFF;
-    I2CCON = I2CCON_ON;
+    SDA = 1; // Set to IDLE state
+    SCL = 1;
 }
 
 /**
@@ -92,13 +87,13 @@ i2c_status_t i2c_memread(uint8_t devaddr, uint8_t memaddr, uint8_t *pdata, uint8
  */
 static void i2c_start(void)
 {
-    MDE = TX_MODE;
-    MDO = 1;
-    MCO = 1;
+    SCL = 0;
+    SDA = 1;
     i2c_delay();
-    MDO = 0;
+    SCL = 1;
     i2c_delay();
-    MCO = 0;
+    SDA = 0;
+    i2c_delay();
 }
 
 /**
@@ -107,12 +102,11 @@ static void i2c_start(void)
  */
 static void i2c_stop(void)
 {
-    MDE = TX_MODE;
-    MDO = 0;
+    SCL = 0;
+    SDA = 0;
+    SCL = 1;
     i2c_delay();
-    MCO = 1;
-    i2c_delay();
-    MDO = 1;
+    SDA = 1;
 }
 
 /**
@@ -123,14 +117,16 @@ static void i2c_stop(void)
 static i2c_status_t i2c_sendbyte(uint8_t byte)
 {
     uint8_t bit_mask = BYTE_MSB_MASK;
-    MDE = TX_MODE;
     do {
-        MDO = byte & bit_mask;
-        i2c_pulse();
+        SCL = 0;
+        SDA = byte & bit_mask;
+        i2c_delay();
+        SCL = 1;
     } while (bit_mask >>= 1);
-    MDE = RX_MODE;
-    i2c_pulse();
-    return MDI;
+    SCL = 0;
+    SDA = 1;
+    SCL = 1;
+    return SDA;
 }
 
 /**
@@ -142,13 +138,15 @@ static uint8_t i2c_receivebyte(i2c_status_t reply_bit)
 {
     uint8_t byte = 0x00;
     uint8_t bit_cnt = BYTE_BIT;
-    MDE = RX_MODE;
+    SCL = 0;
+    SDA = 1;
     do {
-        i2c_pulse();
-        byte = (byte << 1) | MDI;
+        i2c_delay();
+        SCL = 1;
+        byte = (byte << 1) | SDA;
+        SCL = 0;
     } while (--bit_cnt);
-    MDE = TX_MODE;
-    MDO = reply_bit;
-    i2c_pulse();
+    SDA = reply_bit;
+    SCL = 1;
     return byte;
 }

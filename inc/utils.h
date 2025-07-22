@@ -17,14 +17,10 @@
 #include "config.h"
 
 /* Public defines ------------------------------------------------------------*/
-#define bool  __bit
-#define true  ((bool)1)
-#define false ((bool)0)
-
-#define PLLCON_CD_MASK 0x07U
-#define MAX_CORE_CLK   12.582912 // MHz
-#define CORE_CLK_FREQ  (MAX_CORE_CLK / (1U << (PLLCON_INIT_VAL & PLLCON_CD_MASK)))
-#define OVHEAD_CONST   16.023 // Loop overhead constant for volatile uint16_t (measured debugging)
+#define bool         __bit
+#define true         ((bool)1)
+#define false        ((bool)0)
+#define OVHEAD_CONST 16.023 // Loop overhead constant for volatile uint16_t (measured debugging)
 
 /* Public macros -------------------------------------------------------------*/
 #define LOWBYTE(A)  ((uint8_t)(A))                  // Only for r-values
