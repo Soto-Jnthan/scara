@@ -17,7 +17,7 @@
 #define ADC_Y_CONFIG_REG (OS | MUX1 | MODE | PGA1) // ±2.048V AIN1-AIN3
 
 /* Private functions' prototypes ---------------------------------------------*/
-static i2c_status_t read_adc(uint8_t *pdata);
+static i2c_status_t read_adc(__idata uint8_t *pdata);
 
 /**
  * @brief Initialization of the joystick's I2C interface
@@ -34,7 +34,7 @@ void jstk_init(void)
  * @note AIN0-AIN3 and AIN1-AIN3 channels assumed to be connected to the x-axis and y-axis respectively
  * @retval I2C_OK if both ADC readings were successful, I2C_NACK otherwise
  */
-i2c_status_t jstk_read(jstk_out_t *pdata)
+i2c_status_t jstk_read(__idata jstk_out_t *pdata)
 {
     pdata->x = ADC_X_CONFIG_REG;
     pdata->y = ADC_Y_CONFIG_REG;
@@ -47,7 +47,7 @@ i2c_status_t jstk_read(jstk_out_t *pdata)
  * @param[out] pdata Pointer to data buffer containing CONVERSION_REG's value
  * @retval I2C_OK if CONVERSION_REG reading is successful, I2C_NACK otherwise
  */
- static i2c_status_t read_adc(uint8_t *pdata)
+ static i2c_status_t read_adc(__idata uint8_t *pdata)
 {
     i2c_memwrite(ADS1015_I2CADDR, CONFIG_REG, pdata, sizeof(*pdata));
     while (!i2c_memread(ADS1015_I2CADDR, CONFIG_REG, pdata, sizeof(*pdata)) && !(*pdata & OS));

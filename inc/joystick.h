@@ -20,6 +20,6 @@ typedef struct {int8_t x, y;} jstk_out_t;
 
 /* Public functions' prototypes ----------------------------------------------*/
 void jstk_init(void);
-i2c_status_t jstk_read(jstk_out_t *pdata);
+i2c_status_t jstk_read(__idata jstk_out_t *pdata);
 
 #endif // JOYSTICK_H

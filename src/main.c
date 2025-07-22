@@ -18,7 +18,6 @@
 /* Private macros -------------------------------------------------------------*/
 #define DBNC_BTN(BTN_CHK) do {delay_ms(DBNC_DELAY_MS); while (BTN_CHK);} while (0)
 #define ISUB(N, A, B) ((uint##N##_t)((A) - (B))) // Ensure correct casting. A ≥ B required
-#define NORM_INT(N, A, MIN, MAX) (2.0 * MAX_DELTA / ISUB(N, MAX, MIN) * ISUB(N, A, MIN) - MAX_DELTA)
 #define INT_THRSH(T, MIN, MAX) ROUND(ISUB(64, MAX, MIN) * ((T) + 1) / 2 + (MIN))
 #define OVER_THRSH(A, MIN, MAX, T) ((A) <= INT_THRSH(-T, MIN, MAX) || (A) >= INT_THRSH(T, MIN, MAX))
 
@@ -31,6 +30,7 @@ static void state_idle(void);
 static void state_jstk(void);
 static void state_xlda(void);
 static void state_auto(void);
+static float norm_int(__idata int16_t a, int16_t min, int16_t max);
 
 /* Private variables ----------------------------------------------------------*/
 static void (*current_state)(void) = state_init;
@@ -123,10 +123,10 @@ static void state_jstk(void)
     old_pos = current_pos;
 
     if (OVER_THRSH(readout.x, JSTK_X_MIN, JSTK_X_MAX, JSTK_THRSH))
-        current_pos.x += NORM_INT(8, readout.x, JSTK_X_MIN, JSTK_X_MAX);
+        current_pos.x += norm_int(readout.x, JSTK_X_MIN, JSTK_X_MAX);
 
     if (OVER_THRSH(readout.y, JSTK_Y_MIN, JSTK_Y_MAX, JSTK_THRSH))
-        current_pos.y += NORM_INT(8, readout.y, JSTK_Y_MIN, JSTK_Y_MAX);
+        current_pos.y += norm_int(readout.y, JSTK_Y_MIN, JSTK_Y_MAX);
 
     if (JSTK_TIP_BTN_CHK) {
         DBNC_BTN(JSTK_TIP_BTN_CHK);
@@ -173,10 +173,10 @@ static void state_xlda(void)
     old_pos = current_pos;
 
     if (OVER_THRSH(readout.x, XLDA_X_MIN, XLDA_X_MAX, XLDA_THRSH))
-        current_pos.x += NORM_INT(16, readout.x, XLDA_X_MIN, XLDA_X_MAX);
+        current_pos.x += norm_int(readout.x, XLDA_X_MIN, XLDA_X_MAX);
 
     if (OVER_THRSH(readout.y, XLDA_Y_MIN, XLDA_Y_MAX, XLDA_THRSH))
-        current_pos.y += NORM_INT(16, readout.y, XLDA_Y_MIN, XLDA_Y_MAX);
+        current_pos.y += norm_int(readout.y, XLDA_Y_MIN, XLDA_Y_MAX);
 
     current_pos.z = readout.z >= 0; // Tip down with non-negative g
 
@@ -190,7 +190,7 @@ static void state_xlda(void)
  */
 static void state_auto(void)
 {
-    static uint16_t p_cnt;
+    static int16_t p_cnt;
     static const point_t auto_arr[] = AUTO_MODE_POINTS;
     if (current_state != state_auto) {
         current_state = state_auto;
@@ -221,6 +221,18 @@ static void state_auto(void)
     }
 
     delay_ms(AUTO_MODE_DELAY_MS);
+}
+
+/**
+ * @brief Normalize integer to coordinate delta value
+ * @param a Integer to be normalize
+ * @param min Minimal value taken by the integer
+ * @param max Maximal value taken by the integer
+ * @retval Normalized value in ± MAX_DELTA range
+ */
+static float norm_int(__idata int16_t a, int16_t min, int16_t max)
+{
+    return 2.0 * MAX_DELTA * (uint16_t)(a - min) / (uint16_t)(max - min) - MAX_DELTA;
 }
 
 /**

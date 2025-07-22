@@ -17,7 +17,7 @@
  * @param ctrl Pointer to xlda_ctrl_t containing CTRL_X values
  * @retval I2C_ACK if connection established, I2C_NACK otherwise
  */
-i2c_status_t xlda_init(const xlda_ctrl_t *ctrl)
+i2c_status_t xlda_init(__code const xlda_ctrl_t *ctrl)
 {
     i2c_init();
     return i2c_memwrite(LSM6DS_I2CADDR, CTRL1_XL, (uint8_t *)ctrl, sizeof(*ctrl));
@@ -28,7 +28,7 @@ i2c_status_t xlda_init(const xlda_ctrl_t *ctrl)
  * @param pdata Pointer to xlda_out_t used for data reception
  * @retval I2C_ACK if connection established, I2C_NACK otherwise
  */
-i2c_status_t xlda_read(xlda_out_t *pdata)
+i2c_status_t xlda_read(__idata xlda_out_t *pdata)
 {
     while (!i2c_memread(LSM6DS_I2CADDR, STATUS_REG, (uint8_t *)pdata, sizeof(uint8_t)) &&
            !(*(uint8_t *)pdata & SR_XLDA));
