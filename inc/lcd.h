@@ -18,7 +18,7 @@
 /* Public defines ------------------------------------------------------------*/
 #define ENABLE_PUTU
 //#define ENABLE_PUTI
-//#define ENABLE_PUTF
+#define ENABLE_PUTF
 
 /* Public typedefs/enums -----------------------------------------------------*/
 enum lcd_command {

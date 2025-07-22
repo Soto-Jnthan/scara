@@ -31,6 +31,7 @@ static void state_idle(void);
 static void state_jstk(void);
 static void state_xlda(void);
 static void state_auto(void);
+static void show_coords(uint8_t cursor_pos);
 
 /* Private variables ----------------------------------------------------------*/
 static void (*current_state)(void) = state_init;
@@ -137,6 +138,8 @@ static void state_jstk(void)
 
     if (!sv_move(&current_pos))
         current_pos = old_pos;
+    
+    show_coords(LCD_ROWTHREE);
 }
 
 /**
@@ -184,6 +187,8 @@ static void state_xlda(void)
 
     if (!sv_move(&current_pos))
         current_pos = old_pos;
+
+    show_coords(LCD_ROWTHREE);
 }
 
 /**
@@ -223,6 +228,20 @@ static void state_auto(void)
     }
 
     delay_ms(AUTO_MODE_DELAY_MS);
+}
+
+/**
+ * @brief Print current_pos' (x,y) on the LCD
+ * @param cursor_pos Cursor position from which coords. are shown
+ * @retval None
+ */
+static void show_coords(uint8_t cursor_pos)
+{
+    lcd_cmd(cursor_pos);
+    lcd_putf(current_pos.x);
+    lcd_putchar(' ');
+    lcd_putf(current_pos.y);
+    lcd_putchar(' ');
 }
 
 /**
