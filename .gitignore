@@ -1,15 +1,11 @@
 # dot files
 /.vscode/launch.json
 /.settings
-/.eide/log
-/.eide.usr.ctx.json
 
 # project out
-/build
-/bin
-/obj
-/out
+/Listings
+/Objects
 
-# eide template
-*.ept
-*.eide-template
+# keil files
+scara.uvgui.*
+scara.uvopt

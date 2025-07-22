@@ -16,11 +16,17 @@
 #include <ADuC834.h>
 
 /* Public defines ------------------------------------------------------------*/
-#define BTN1_CHK           (!P1_1)
-#define BTN2_CHK           (!P2_0)
-#define BTN3_CHK           (!P3_5)
-#define BTN4_CHK           (!P3_2)
-#define BTN5_CHK           (!P3_3)
+sbit btn1_sbit =           P1 ^ 1;
+sbit btn2_sbit =           P2 ^ 0;
+sbit btn3_sbit =           P3 ^ 5;
+sbit btn4_sbit =           P3 ^ 2;
+sbit btn5_sbit =           P3 ^ 3;
+
+#define BTN1_CHK           (!btn1_sbit)
+#define BTN2_CHK           (!btn2_sbit)
+#define BTN3_CHK           (!btn3_sbit)
+#define BTN4_CHK           (!btn4_sbit)
+#define BTN5_CHK           (!btn5_sbit)
 
 /* SV lines are inverted */
 #define PORT_SV            P0
@@ -36,8 +42,8 @@
 #define LED5_PIN_MASK      (1u << 4)
 
 #define PORT_LCD_D         P2
-#define LCD_RS_SBIT        P3_6
-#define LCD_E_SBIT         P3_7
+sbit lcd_rs_sbit =         P3 ^ 6;
+sbit lcd_e_sbit  =         P3 ^ 7;
 
 #define PORT_LCD_LED       P2
 #define LCD_RED_LED_MASK   (1u << 1)

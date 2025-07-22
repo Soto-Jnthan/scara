@@ -68,7 +68,7 @@ enum lcd_command {
 // *:   Don't Care
 };
 
-typedef enum {
+enum lcd_color {
     LCD_NOLEDS,
     LCD_RED = LCD_RED_LED_MASK, // RGB
     LCD_GREEN = LCD_GREEN_LED_MASK,
@@ -77,7 +77,7 @@ typedef enum {
     LCD_MAGENTA = LCD_RED | LCD_BLUE,
     LCD_YELLOW = LCD_RED | LCD_GREEN,
     LCD_WHITE = LCD_RED | LCD_GREEN | LCD_BLUE
-} lcd_color_t;
+};
 
 /* Public functions' prototypes ----------------------------------------------*/
 void lcd_init(void);
@@ -97,29 +97,19 @@ void lcd_puti(int16_t val);
 void lcd_putf(float val);
 #endif
 
-/* Public inline functions' definitions --------------------------------------*/
+/* Public macros --------------------------------------------------------------*/
 
 /**
  * @brief  Turn on/off the LEDs of the LCD
- * @param  c Specify LEDs to be turned on via lcd_color_t enum
- * @retval None
+ * @param  c Specify LEDs to be turned on via enum lcd_color
  */
-inline void lcd_setcolor(lcd_color_t c)
-{
-    PORT_LCD_LED &= ~c;
-    PORT_LCD_LED |= c ^ LCD_WHITE;
-}
+#define LCD_SETCOLOR(c) do {PORT_LCD_LED &= ~c; PORT_LCD_LED |= c ^ LCD_WHITE;} while (0)
 
 /**
  * @brief  Send a command and a null-terminated string to the LCD
  * @param  str Pointer to null-terminated array of characters
  * @param  cmd Command to be executed before sending the array
- * @retval None
  */
-inline void lcd_puts_at(const char *str, uint8_t cmd)
-{
-    lcd_cmd(cmd);
-    lcd_puts(str);
-}
+#define LCD_PUTS_AT(str, cmd) do {lcd_cmd(cmd); lcd_puts(str);} while (0)
 
 #endif // LCD_H

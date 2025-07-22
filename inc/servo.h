@@ -17,8 +17,10 @@
 #include "utils.h"
 
 /* Public defines ------------------------------------------------------------*/
-#define MAX_ANGLE PI  // Rad
-#define MIN_ANGLE 0.0 // Rad
+#define PI         3.14159265358979323846 
+#define MAX_ANGLE  PI  // Rad
+#define MIN_ANGLE  0.0 // Rad
+#define TF2_VECTOR 5
 
 #define SV_MIN_CNT    US_TO_MC(SV_MIN_US_PULSE)
 #define SV_MAX_CNT    US_TO_MC(SV_MAX_US_PULSE)
@@ -33,13 +35,13 @@
 
 /* Public typedefs/enums ------------------------------------------------------*/
 typedef enum {BASE, MID, TIP} servo_t;
-typedef struct {float x, y; _Bool z;} point_t;
+typedef struct {float x, y; uint8_t z;} point_t;
 
 /* Public functions' prototypes -----------------------------------------------*/
 void sv_init(void);
 bool sv_setcnt(servo_t sv, uint16_t cnt);
 bool sv_move(const point_t *p);
-void sv_isr(void) __interrupt(TF2_VECTOR) __naked;
+void sv_isr(void);
 
 /** ASSUMED ARM CONFIGURATION FOR ANGLE CALCULATIONS **/
 /** WHERE SV_MIN_US_PULSE EQUALS 0 AS MEASURED BELOW **/

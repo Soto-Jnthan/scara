@@ -24,19 +24,11 @@ enum {I2C_ACK, I2C_NACK};
 
 /* Public functions' prototypes ----------------------------------------------*/
 void i2c_init(void);
-i2c_status_t i2c_memwrite(uint8_t devaddr, uint8_t memaddr, const uint8_t *pdata, uint8_t datalen);
-i2c_status_t i2c_memread(uint8_t devaddr, uint8_t memaddr, uint8_t *pdata, uint8_t datalen);
+i2c_status_t i2c_memwrite(uint8_t devaddr, uint8_t memaddr, const uint8_t *p_data, uint8_t datalen);
+i2c_status_t i2c_memread(uint8_t devaddr, uint8_t memaddr, uint8_t *p_data, uint8_t datalen);
 
-/* Public inline functions' definitions --------------------------------------*/
-
-inline i2c_status_t i2c_write(uint8_t devaddr, const uint8_t *pdata, uint8_t datalen)
-{
-    return i2c_memwrite(devaddr | BYTE_MSB_MASK, 0, pdata, datalen);
-}
-
-inline i2c_status_t i2c_read(uint8_t devaddr, uint8_t *pdata, uint8_t datalen)
-{
-    return i2c_memread(devaddr | BYTE_MSB_MASK, 0, pdata, datalen);
-}
+/* Public macros -------------------------------------------------------------*/
+#define I2C_WRITE(devaddr, p_data, datalen) i2c_memwrite(devaddr | BYTE_MSB_MASK, 0, p_data, datalen)
+#define I2C_READ(devaddr, p_data, datalen) i2c_memread(devaddr | BYTE_MSB_MASK, 0, p_data, datalen)
 
 #endif // I2C_H

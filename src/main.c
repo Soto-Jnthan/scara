@@ -32,8 +32,9 @@ static void state_xlda(void);
 static void state_auto(void);
 
 /* Private variables ----------------------------------------------------------*/
-static void (*current_state)(void) = state_init;
 static point_t current_pos = INITIAL_POSITION;
+static enum {ST_INIT, ST_IDLE, ST_JSTK, ST_XLDA, ST_AUTO} current_state;
+static void (*const code state_arr[])(void) = {state_init, state_idle, state_jstk, state_xlda, state_auto};
 
 /**
  * @brief  The application entry point
@@ -43,7 +44,7 @@ void main(void)
 {
     PLLCON = PLLCON_INIT_VAL; // Configure core clock
     while (1)
-        current_state();
+        state_arr[current_state]();
 }
 
 /**
@@ -63,14 +64,14 @@ static void state_init(void)
  */
 static void state_idle(void)
 {
-    if (current_state != state_idle) {
-        current_state = state_idle;
+    if (current_state != ST_IDLE) {
+        current_state = ST_IDLE;
         sv_move(&current_pos); // Init/revert current_pos
-        lcd_setcolor(LCD_GREEN);
-        lcd_puts_at("IDLE Mode", LCD_CLEAR);
-        lcd_puts_at("BUT.A:JSTK", LCD_ROWTWO);
-        lcd_puts_at("BUT.B:XLDA", LCD_ROWTHREE);
-        lcd_puts_at("BUT.C:Auto", LCD_ROWFOUR);
+        LCD_SETCOLOR(LCD_GREEN);
+        LCD_PUTS_AT("IDLE Mode", LCD_CLEAR);
+        LCD_PUTS_AT("BUT.A:JSTK", LCD_ROWTWO);
+        LCD_PUTS_AT("BUT.B:XLDA", LCD_ROWTHREE);
+        LCD_PUTS_AT("BUT.C:Auto", LCD_ROWFOUR);
         return;
     }
 
@@ -100,36 +101,36 @@ static void state_jstk(void)
     float delta;
     point_t old_pos;
     jstk_out_t readout;
-    if (current_state != state_jstk) {
-        current_state = state_jstk;
-        lcd_setcolor(LCD_CYAN);
-        lcd_puts_at("JSTK Mode", LCD_CLEAR);
-        lcd_puts_at("BUT.C:Exit", LCD_ROWFOUR);
+    if (current_state != ST_JSTK) {
+        current_state = ST_JSTK;
+        LCD_SETCOLOR(LCD_CYAN);
+        LCD_PUTS_AT("JSTK Mode", LCD_CLEAR);
+        LCD_PUTS_AT("BUT.C:Exit", LCD_ROWFOUR);
         jstk_init();
         return;
     }
 
     if (BTNC_CHK) {
-        jstk_disable();
+        JSTK_DISABLE();
         state_idle();
         DBNC_BTN(BTNC_CHK);
         return;
     }
 
     if (jstk_read(&readout) != ADC_OK) {
-        lcd_setcolor(LCD_RED);
-        lcd_puts_at("ADC_ERR", LCD_ROWTWO);
+        LCD_SETCOLOR(LCD_RED);
+        LCD_PUTS_AT("ADC_ERR", LCD_ROWTWO);
         return;
     }
 
     old_pos = current_pos;
 
     delta = NORM_INT(8, readout.x, JSTK_X_MIN, JSTK_X_MAX);
-    if (fabsf(delta) >= JSTK_THRSH * MAX_DELTA)
+    if (fabs(delta) >= JSTK_THRSH * MAX_DELTA)
         current_pos.x += delta;
 
     delta = NORM_INT(8, readout.y, JSTK_Y_MIN, JSTK_Y_MAX);
-    if (fabsf(delta) >= JSTK_THRSH * MAX_DELTA)
+    if (fabs(delta) >= JSTK_THRSH * MAX_DELTA)
         current_pos.y += delta;
 
     if (JSTK_TIP_BTN_CHK) {
@@ -151,13 +152,13 @@ static void state_xlda(void)
     point_t old_pos;
     xlda_out_t readout;
     static i2c_status_t init_nack;
-    static const xlda_ctrl_t xl_on = XLDA_ON_VALS;
-    static const xlda_ctrl_t xl_off = XLDA_OFF_VALS;
-    if (current_state != state_xlda) {
-        current_state = state_xlda;
-        lcd_setcolor(LCD_CYAN);
-        lcd_puts_at("XLDA Mode", LCD_CLEAR);
-        lcd_puts_at("BUT.C:Exit", LCD_ROWFOUR);
+    static code const xlda_ctrl_t xl_on = CTRL_ON_VALS;
+    static code const xlda_ctrl_t xl_off = CTRL_OFF_VALS;
+    if (current_state != ST_XLDA) {
+        current_state = ST_XLDA;
+        LCD_SETCOLOR(LCD_CYAN);
+        LCD_PUTS_AT("XLDA Mode", LCD_CLEAR);
+        LCD_PUTS_AT("BUT.C:Exit", LCD_ROWFOUR);
         init_nack = xlda_init(&xl_on);
         return;
     }
@@ -169,20 +170,20 @@ static void state_xlda(void)
         return;
     }
 
-    if (init_nack || xlda_read(&readout)) {
-        lcd_setcolor(LCD_RED);
-        lcd_puts_at("I2C_ERR", LCD_ROWTWO);
+    if (init_nack | xlda_read(&readout)) {
+        LCD_SETCOLOR(LCD_RED);
+        LCD_PUTS_AT("I2C_ERR", LCD_ROWTWO);
         return;
     }
 
     old_pos = current_pos;
 
     delta = NORM_INT(16, readout.x, XLDA_X_MIN, XLDA_X_MAX);
-    if (fabsf(delta) >= XLDA_THRSH * MAX_DELTA)
+    if (fabs(delta) >= XLDA_THRSH * MAX_DELTA)
         current_pos.x += delta;
 
     delta = NORM_INT(16, readout.y, XLDA_Y_MIN, XLDA_Y_MAX);
-    if (fabsf(delta) >= XLDA_THRSH * MAX_DELTA)
+    if (fabs(delta) >= XLDA_THRSH * MAX_DELTA)
         current_pos.y += delta;
 
     current_pos.z = readout.z >= 0; // Tip down with non-negative g
@@ -198,13 +199,13 @@ static void state_xlda(void)
 static void state_auto(void)
 {
     static uint8_t p_cnt;
-    static const point_t auto_arr[] = AUTO_MODE_POINTS;
-    if (current_state != state_auto) {
-        current_state = state_auto;
-        lcd_setcolor(LCD_MAGENTA);
-        lcd_puts_at("Auto Mode", LCD_CLEAR);
-        lcd_puts_at("BUT.C:Exit", LCD_ROWFOUR);
-        lcd_puts_at("In Progress", LCD_ROWTHREE);
+    static code const point_t auto_arr[] = AUTO_MODE_POINTS;
+    if (current_state != ST_AUTO) {
+        current_state = ST_AUTO;
+        LCD_SETCOLOR(LCD_MAGENTA);
+        LCD_PUTS_AT("Auto Mode", LCD_CLEAR);
+        LCD_PUTS_AT("BUT.C:Exit", LCD_ROWFOUR);
+        LCD_PUTS_AT("In Progress", LCD_ROWTHREE);
         lcd_cmd(LCD_DCBON);
         return;
     }
@@ -218,8 +219,8 @@ static void state_auto(void)
     }
 
     if (!sv_move(&auto_arr[p_cnt++])) {
-        lcd_setcolor(LCD_RED);
-        lcd_puts_at("BAD_COORD.", LCD_ROWTWO);
+        LCD_SETCOLOR(LCD_RED);
+        LCD_PUTS_AT("BAD_COORD.", LCD_ROWTWO);
     }
 
     delay_ms(AUTO_MODE_DELAY_MS);

@@ -9,6 +9,7 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
+#include <intrins.h>
 #include "i2c.h"
 
 /* Private defines -----------------------------------------------------------*/
@@ -22,9 +23,8 @@
 #define I2C_WR(ADDR) ((ADDR) << 1)
 #define I2C_RD(ADDR) (((ADDR) << 1) | 1U)
 
-/* Private inline functions' definitions ---------------------------------------*/
-inline void i2c_delay(void) { NOP(); NOP(); NOP(); } // Depends on I2C mode and core frequency
-inline void i2c_pulse(void) { MCO = 1; i2c_delay(); MCO = 0; }
+#define I2C_DELAY() do {_nop_(); _nop_(); _nop_();} while (0) // Depends on I2C mode and core frequency
+#define I2C_PULSE() do {MCO = 1; I2C_DELAY(); MCO = 0;} while (0)
 
 /* Private functions' prototypes -----------------------------------------------*/
 static void i2c_start(void);
@@ -47,16 +47,16 @@ void i2c_init(void)
  * @brief  Write an amount of data starting from a memory address of the slave device
  * @param  devaddr Target 7-bit I2C device address
  * @param  memaddr Internal memory address
- * @param  pdata Pointer to data buffer
+ * @param  p_data Pointer to data buffer
  * @param  datalen Amount of data in bytes to be sent
  * @note   Set devaddr's MSB to ignore memaddr and write data directly to device
  * @retval I2C_ACK if successful, I2C_NACK otherwise
  */
-i2c_status_t i2c_memwrite(uint8_t devaddr, uint8_t memaddr, const uint8_t *pdata, uint8_t datalen)
+i2c_status_t i2c_memwrite(uint8_t devaddr, uint8_t memaddr, const uint8_t *p_data, uint8_t datalen)
 {
     i2c_start();
     if (!i2c_sendbyte(I2C_WR(devaddr)) && (devaddr & BYTE_MSB_MASK || !i2c_sendbyte(memaddr)))
-        for (; datalen && !i2c_sendbyte(*pdata++); datalen--);
+        for (; datalen && !i2c_sendbyte(*p_data++); datalen--);
     i2c_stop();
     return datalen;
 }
@@ -65,12 +65,12 @@ i2c_status_t i2c_memwrite(uint8_t devaddr, uint8_t memaddr, const uint8_t *pdata
  * @brief  Read an amount of data starting from a memory address of the slave device
  * @param  devaddr Target 7-bit I2C device address
  * @param  memaddr Internal memory address
- * @param  pdata Pointer to data buffer
+ * @param  p_data Pointer to data buffer
  * @param  datalen Amount of data in bytes to be read
  * @note   Set devaddr's MSB to ignore memaddr and read data directly from device
  * @retval I2C_ACK if successful, I2C_NACK otherwise
  */
-i2c_status_t i2c_memread(uint8_t devaddr, uint8_t memaddr, uint8_t *pdata, uint8_t datalen)
+i2c_status_t i2c_memread(uint8_t devaddr, uint8_t memaddr, uint8_t *p_data, uint8_t datalen)
 {
     i2c_start();
     if (!(devaddr & BYTE_MSB_MASK)) {
@@ -80,7 +80,7 @@ i2c_status_t i2c_memread(uint8_t devaddr, uint8_t memaddr, uint8_t *pdata, uint8
     }
     if (!i2c_sendbyte(I2C_RD(devaddr)))
         for (; datalen; datalen--)
-            *pdata++ = i2c_receivebyte(datalen == 1); // End w/NACK
+            *p_data++ = i2c_receivebyte(datalen == 1); // End w/NACK
   clean_up:
     i2c_stop();
     return datalen;
@@ -95,9 +95,9 @@ static void i2c_start(void)
     MDE = TX_MODE;
     MDO = 1;
     MCO = 1;
-    i2c_delay();
+    I2C_DELAY();
     MDO = 0;
-    i2c_delay();
+    I2C_DELAY();
     MCO = 0;
 }
 
@@ -109,9 +109,9 @@ static void i2c_stop(void)
 {
     MDE = TX_MODE;
     MDO = 0;
-    i2c_delay();
+    I2C_DELAY();
     MCO = 1;
-    i2c_delay();
+    I2C_DELAY();
     MDO = 1;
 }
 
@@ -126,10 +126,10 @@ static i2c_status_t i2c_sendbyte(uint8_t byte)
     MDE = TX_MODE;
     do {
         MDO = byte & bit_mask;
-        i2c_pulse();
+        I2C_PULSE();
     } while (bit_mask >>= 1);
     MDE = RX_MODE;
-    i2c_pulse();
+    I2C_PULSE();
     return MDI;
 }
 
@@ -144,11 +144,11 @@ static uint8_t i2c_receivebyte(i2c_status_t reply_bit)
     uint8_t bit_cnt = BYTE_BIT;
     MDE = RX_MODE;
     do {
-        i2c_pulse();
-        byte = (byte << 1) | MDI;
+        I2C_PULSE();
+        byte = _crol_(byte, 1) | MDI;
     } while (--bit_cnt);
     MDE = TX_MODE;
     MDO = reply_bit;
-    i2c_pulse();
+    I2C_PULSE();
     return byte;
 }

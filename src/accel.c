@@ -25,12 +25,13 @@ i2c_status_t xlda_init(const xlda_ctrl_t *ctrl)
 
 /**
  * @brief Read the value of the three axes of the accelerometer
- * @param pdata Pointer to xlda_out_t used for data reception
+ * @param p_data Pointer to xlda_out_t used for data reception
+ * @note CTRL3_C's BLE flag must be set to match KEIL endianess
  * @retval I2C_ACK if connection established, I2C_NACK otherwise
  */
-i2c_status_t xlda_read(xlda_out_t *pdata)
+i2c_status_t xlda_read(xlda_out_t *p_data)
 {
-    while (!i2c_memread(LSM6DS_I2CADDR, STATUS_REG, (uint8_t *)pdata, sizeof(uint8_t)) &&
-           !(*(uint8_t *)pdata & SR_XLDA));
-    return i2c_memread(LSM6DS_I2CADDR, OUTX_L_XL, (uint8_t *)pdata, sizeof(*pdata));
+    while (!i2c_memread(LSM6DS_I2CADDR, STATUS_REG, (uint8_t *)p_data, sizeof(uint8_t)) &&
+           !(*(uint8_t *)p_data & SR_XLDA));
+    return i2c_memread(LSM6DS_I2CADDR, OUTX_L_XL, (uint8_t *)p_data, sizeof(*p_data));
 }

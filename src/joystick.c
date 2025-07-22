@@ -25,17 +25,17 @@ void jstk_init(void)
 
 /**
  * @brief Read the values of the two axes of the joystick
- * @param pdata Pointer to jstk_out_t used for data reception
+ * @param p_data Pointer to jstk_out_t used for data reception
  * @note ADC0 and ADC1 assumed to be connected to x-axis and y-axis respectively
  * @retval ADC_OK if both ADC readings were successful, ADC_ERR otherwise
  */
-adc_status_t jstk_read(jstk_out_t *pdata)
+adc_status_t jstk_read(jstk_out_t *p_data)
 {
     RDY0 = 0;
     RDY1 = 0;
     while (!RDY0);
-    pdata->x = ADC0H;
+    p_data->x = ADC0H;
     while (!RDY1);
-    pdata->y = ADC1H;
+    p_data->y = ADC1H;
     return ERR0 | ERR1;
 }
