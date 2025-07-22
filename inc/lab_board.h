@@ -35,10 +35,6 @@
 #define LED4_PIN_MASK      (1u << 5)
 #define LED5_PIN_MASK      (1u << 4)
 
-#define PORT_LCD_D         P2
-#define LCD_RS_SBIT        P3_6
-#define LCD_E_SBIT         P3_7
-
 #define PORT_LCD_LED       P2
 #define LCD_RED_LED_MASK   (1u << 1)
 #define LCD_GREEN_LED_MASK (1u << 2)

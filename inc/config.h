@@ -65,7 +65,8 @@ runtime transformations still needed for JSTK/XLDA modes */
 #define XLDA_THRSH    0.1    // Accelerometer input threshold (between 0 and 1.0)
 
 /* lcd config definitions: */
-#define LCD_COLUMNS_PER_ROW 12
+#define LCD_I2CADDR         0x38
+#define LCD_COLUMNS_PER_ROW 16
 
 /* servo config definitions: */
 #define SV_L1            8.0    // Arm length of 'base' servo (in centimeters)
